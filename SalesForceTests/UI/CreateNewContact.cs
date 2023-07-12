@@ -7,6 +7,8 @@ using NUnit.Framework;
 
 namespace Tests.UI
 {
+    [Parallelizable(ParallelScope.Fixtures)]
+    [TestFixture]
     public class CreateNewContact : TestBaseSalesForce
     {
         [Test(Description = "Health check")]
@@ -14,10 +16,8 @@ namespace Tests.UI
         [Description("Add contract with minimal data")]
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
-        [AllureSuite("Hometask15")]
+        [AllureSuite("UI Tests")]
         [AllureSubSuite("CreateNewContact")]
-        [AllureIssue("JIRA-14")]
-        [AllureTms("TMS-16")]
         public void CreateNewContact_OnlyRequiredAtts_Created()
         {
             var contact = new Contact();
@@ -31,7 +31,9 @@ namespace Tests.UI
         }
 
         [Test]
-        [AllureSuite("Hometask15")]
+        [AllureTag("Smoke")]
+        [AllureOwner("Margarita")]
+        [AllureSuite("UI Tests")]
         [AllureSubSuite("CreateNewContact")]
         public void CreateNewContact_Cancel_NotCreated()
         {

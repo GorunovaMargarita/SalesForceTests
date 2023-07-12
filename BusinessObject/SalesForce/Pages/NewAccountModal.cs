@@ -1,7 +1,7 @@
 ﻿using BusinessObject.SalesForce.Model;
+using Core;
 using Core.Elements;
 using NUnit.Allure.Attributes;
-using OpenQA.Selenium;
 
 namespace BusinessObject.SalesForce.Pages
 {
@@ -53,6 +53,8 @@ namespace BusinessObject.SalesForce.Pages
         [AllureStep]
         public NewAccountModal FillNewAccountForm(Account account)
         {
+            Log.Instance.Logger.Info($"Account model:\r\n{account.ToString()}");
+
             accountNameInput.EnterText(account.AccountName);
             parentAccountDropDown.Select(account.ParentAccount);
             accountNumberInput.EnterText(account.AccountNumber);

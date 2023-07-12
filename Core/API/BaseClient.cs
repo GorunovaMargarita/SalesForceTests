@@ -11,8 +11,6 @@ namespace Core.API
     public class BaseClient
     {
         private RestClient restClient;
-        public Logger logger = LogManager.GetCurrentClassLogger();
-
         public BaseClient(string url)
         {
             var option = new RestClientOptions(url)
@@ -26,29 +24,30 @@ namespace Core.API
 
         public void AddAuthToken(string Token)
         {
-            restClient.AddDefaultHeader("Token", Token);
+            restClient.AddDefaultHeader("Authorization", Token);
         }
 
         public RestResponse Execute(RestRequest request)
         {
-            logger.Info(RequestToLog(request));
+            Log.Instance.Logger.Info($"Request method: {request.Method},\r\n URI: {restClient.BuildUri(request)}");
+            Log.Instance.Logger.Info(RequestToLog(request));
             var response = restClient.Execute(request);
-            logger.Info($"Response content: {response.Content.Normalize()}");
+            Log.Instance.Logger.Info($"Response content: {response.Content.Normalize()}");
             return response;
         }
 
         public T Execute<T>(RestRequest request)
         {
-            logger.Info(request);
+            Log.Instance.Logger.Info(request);
             var response = restClient.Execute<T>(request);
-            logger.Info($"Response content: {response.Content.Normalize()}");
+            Log.Instance.Logger.Info($"Response content: {response.Content.Normalize()}");
             return response.Data;
         }
 
         public string RequestToLog(RestRequest request)
         {
             var sb = new StringBuilder();
-            logger.Info("Request parameters: \r\n");
+            Log.Instance.Logger.Info("Request parameters: \r\n");
             foreach (var param in request.Parameters)
             {
                 sb.AppendFormat("{0}: {1}\r\n", param.Name, param.Value);

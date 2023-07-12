@@ -6,12 +6,14 @@ using NUnit.Framework;
 
 namespace Tests.UI
 {
+    [Parallelizable(ParallelScope.Fixtures)]
+    [TestFixture]
     public class CreateNewAccount : TestBaseSalesForce
     {
         [Test]
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
-        [AllureSuite("Hometask15")]
+        [AllureSuite("UI Tests")]
         [AllureSubSuite("CreateNewAccount")]
         public void CreateNewAccount_OnlyRequiredAtts_Created()
         {
@@ -27,15 +29,16 @@ namespace Tests.UI
         }
 
         [Test]
+        [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
-        [AllureSuite("Hometask15")]
+        [AllureSuite("UI Tests")]
         [AllureSubSuite("CreateNewAccount")]
         public void CreateNewAccount_FullAccountInformationPart_Created()
         {
             var account = new Account();
             account.AccountName = Faker.InternetFaker.Email();
             account.AccountSite = Faker.InternetFaker.Email();
-            account.ParentAccount = "fiona@hotmail.com";
+            account.ParentAccount = TestData.defaultAccount;
             account.AccountNumber = Faker.NumberFaker.Number().ToString();
             account.Type = "Other";
             account.Industry = "Education";
