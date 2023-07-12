@@ -45,6 +45,8 @@ namespace BusinessObject.SalesForce.Pages
         [AllureStep]
         public NewContactModal FillNewContactForm(Contact contact)
         {
+            Log.Instance.Logger.Info($"Contact model:\r\n{contact.ToString()}");
+
             salutationDropDown.Select(contact.Salutation);
             firstNameInput.EnterText(contact.FirstName);
             lastNameInput.EnterText(contact.LastName);

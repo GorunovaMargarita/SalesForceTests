@@ -1,14 +1,17 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
+using Bogus.DataSets;
+using Core.Helpers;
+using FluentAssertions.Equivalency;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessObject.SalesForce.Model
 {
     public class Account
     {
+        [Newtonsoft.Json.JsonProperty("Id", DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore)]
+        public string? Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("Name", DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore)]
         public string? AccountName { get; set; }
         public string? ParentAccount { get; set; }
         public string? AccountNumber { get; set; }
@@ -45,5 +48,18 @@ namespace BusinessObject.SalesForce.Model
         public string? UpsellOpportunity { get; set; }
         public string? Description { get; set; }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            var propertyNames = ReflectionHelper.GetPropertyNames(this);
+            foreach(var property in propertyNames)
+            {
+                sb.Append(property);
+                sb.Append(": ");
+                sb.Append(ReflectionHelper.GetPropertyValue(property,this));
+                sb.Append(System.Environment.NewLine);
+            }
+            return sb.ToString();
+        }
     }
 }

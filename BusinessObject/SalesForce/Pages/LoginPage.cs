@@ -11,8 +11,7 @@ namespace BusinessObject.SalesForce.Pages
 {
     public class LoginPage : BasePage
     {
-        //private string url = "https://ooomtsdi-dev-ed.develop.my.salesforce.com/";
-        private string url = Configurator.API.BaseUrl;
+        private string url = "https://ooomtsdi-dev-ed.develop.my.salesforce.com/";
 
         private Input userNameInput = new(By.XPath("//input[@name='username']"));
         private Input passwordInput = new(By.XPath("//input[@name='pw']"));

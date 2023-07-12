@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Core.Helpers;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessObject.SalesForce.Model
 {
@@ -40,5 +37,19 @@ namespace BusinessObject.SalesForce.Model
         public string? Languages { get; set; }
         public string? Level { get; set; }
         public string? Description { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            var propertyNames = ReflectionHelper.GetPropertyNames(this);
+            foreach (var property in propertyNames)
+            {
+                sb.Append(property);
+                sb.Append(": ");
+                sb.Append(ReflectionHelper.GetPropertyValue(property, this));
+                sb.Append(System.Environment.NewLine);
+            }
+            return sb.ToString();
+        }
     }
 }
