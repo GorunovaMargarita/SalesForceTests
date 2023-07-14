@@ -5,7 +5,7 @@ namespace Core
     public class Log
     {
         private static Log? instance;
-        private static Logger logger; //= LogManager.GetCurrentClassLogger();
+        private static Logger logger; 
         public Logger Logger { get { return logger; } }
         public static Log Instance
         {

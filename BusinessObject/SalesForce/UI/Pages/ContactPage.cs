@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core;
 
-namespace BusinessObject.SalesForce.Pages
+namespace BusinessObject.SalesForce.UI.Pages
 {
     public class ContactPage : BasePage
     {

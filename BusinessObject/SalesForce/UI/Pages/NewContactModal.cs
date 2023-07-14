@@ -5,7 +5,7 @@ using NUnit.Allure.Attributes;
 using OpenQA.Selenium;
 using BusinessObject.SalesForce.Model;
 
-namespace BusinessObject.SalesForce.Pages
+namespace BusinessObject.SalesForce.UI.Pages
 {
     public class NewContactModal
     {

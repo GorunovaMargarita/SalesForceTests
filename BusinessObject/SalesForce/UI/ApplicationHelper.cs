@@ -1,5 +1,5 @@
 ﻿using BusinessObject.SalesForce.Model;
-using BusinessObject.SalesForce.Pages;
+using BusinessObject.SalesForce.UI.Pages;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessObject.SalesForce
+namespace BusinessObject.SalesForce.UI
 {
     public class ApplicationHelper
     {

@@ -10,12 +10,13 @@ namespace Tests.API
 {
     public class TestBaseAPI : TestBase
     {
-        protected AccountSteps accountHelper;
+        //protected AccountSteps accountHelper;
+        protected APISteps APISteps;
 
         [OneTimeSetUp]
         public void Initial()
         {
-            accountHelper = new AccountSteps();
+            APISteps = new APISteps();
         }
     }
 }

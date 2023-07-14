@@ -9,7 +9,7 @@ namespace Tests.UI
 {
     [Parallelizable(ParallelScope.Fixtures)]
     [TestFixture]
-    public class CreateNewContact : TestBaseSalesForce
+    public class CreateNewContact : TestBaseUI
     {
         [Test(Description = "Health check")]
         [AllureSeverity(SeverityLevel.critical)]

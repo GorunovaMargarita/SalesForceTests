@@ -3,7 +3,7 @@ using Core;
 using Core.Elements;
 using NUnit.Allure.Attributes;
 
-namespace BusinessObject.SalesForce.Pages
+namespace BusinessObject.SalesForce.UI.Pages
 {
     public class NewAccountModal
     {
