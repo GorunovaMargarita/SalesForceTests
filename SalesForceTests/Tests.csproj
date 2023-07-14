@@ -11,17 +11,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="appsettings.Prod.json" />
+    <None Remove="Configs\appsettings.Prod.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.Debug.json">
+    <Content Include="Configs\appsettings.Debug.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="appsettings.Prod.json">
+    <Content Include="Configs\appsettings.Prod.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="appsettings.json">
+    <Content Include="Configs\appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -52,12 +52,12 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<None Update="appsettings.Prod.json">
+		<None Update="Configs\appsettings.Prod.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Remove="appsettings.Debug.json" />
-		<None Include="appsettings.$(Configuration).json">
-			<Link>appsettings.custom.json</Link>
+		<None Remove="Configs\appsettings.Debug.json" />
+		<None Include="Configs\appsettings.$(Configuration).json">
+			<Link>Configs\appsettings.custom.json</Link>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

@@ -7,7 +7,7 @@ using NUnit.Allure.Attributes;
 using OpenQA.Selenium;
 
 
-namespace BusinessObject.SalesForce.Pages
+namespace BusinessObject.SalesForce.UI.Pages
 {
     public class LoginPage : BasePage
     {

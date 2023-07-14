@@ -1,10 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 
 namespace Core.Configuration
@@ -19,8 +13,8 @@ namespace Core.Configuration
         {
             configurationRoot = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("appsettings.custom.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("Configs\\appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("Configs\\appsettings.custom.json", optional: true, reloadOnChange: true)
                 .Build();
         }
 

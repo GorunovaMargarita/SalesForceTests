@@ -8,7 +8,7 @@ namespace Tests.UI
 {
     [Parallelizable(ParallelScope.Fixtures)]
     [TestFixture]
-    public class CreateNewAccount : TestBaseSalesForce
+    public class CreateNewAccount : TestBaseUI
     {
         [Test]
         [AllureTag("Smoke")]
@@ -38,7 +38,7 @@ namespace Tests.UI
             var account = new Account();
             account.AccountName = Faker.InternetFaker.Email();
             account.AccountSite = Faker.InternetFaker.Email();
-            account.ParentAccount = TestData.defaultAccount;
+            account.ParentAccount = AccountBuilder.DefaultAcccount().AccountName;
             account.AccountNumber = Faker.NumberFaker.Number().ToString();
             account.Type = "Other";
             account.Industry = "Education";

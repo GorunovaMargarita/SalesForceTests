@@ -1,4 +1,4 @@
-﻿using BusinessObject.SalesForce;
+﻿using BusinessObject.SalesForce.UI;
 using Core;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Tests.UI
 {
-    public class TestBaseSalesForce : TestBase
+    public class TestBaseUI : TestBase
     {
         protected ApplicationHelper appHelper = new ApplicationHelper(Browser.Instance.Driver);
     }

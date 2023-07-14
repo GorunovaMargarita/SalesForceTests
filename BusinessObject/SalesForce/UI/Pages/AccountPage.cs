@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessObject.SalesForce.Pages
+namespace BusinessObject.SalesForce.UI.Pages
 {
     public class AccountPage : BasePage
     {

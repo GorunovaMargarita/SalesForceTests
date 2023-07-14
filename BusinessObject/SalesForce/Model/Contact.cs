@@ -5,9 +5,13 @@ namespace BusinessObject.SalesForce.Model
 {
     public class Contact
     {
+
+        [Newtonsoft.Json.JsonProperty("Id", DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore)]
+        public string? Id { get; set; }
         public string? Salutation { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        [Newtonsoft.Json.JsonProperty("Name", DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore)]
         public string? AccountName { get; set; }
         public string? Title { get; set; }
         public string? Departament { get; set; }
