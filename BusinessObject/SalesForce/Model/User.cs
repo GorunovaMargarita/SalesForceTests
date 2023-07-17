@@ -1,6 +1,6 @@
 ﻿namespace BusinessObject.SalesForce.Model
 {
-    public class User
+    public class User : BaseModel
     {
         public string Name { get; set; }
         public string Password { get; set; }
@@ -9,11 +9,6 @@
         {
             Name = name;
             Password = password;
-        }
-
-        public override string? ToString()
-        {
-            return $"Name: {Name}, password: {Password}";
         }
     }
 }

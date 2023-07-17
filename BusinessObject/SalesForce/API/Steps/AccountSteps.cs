@@ -1,5 +1,6 @@
 ﻿using BusinessObject.SalesForce.API.Services;
 using BusinessObject.SalesForce.Model;
+using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Allure.Attributes;
@@ -43,6 +44,37 @@ namespace BusinessObject.SalesForce.API.Steps
                 return JsonConvert.DeserializeObject<CreateResponse>(response.Content);
             else
                 return JsonConvert.DeserializeObject<ICollection<Error>>(response.Content);
+        }
+
+        [AllureStep]
+        public new object ChangeAccount(string accountForChangeId, JObject account)
+        {
+            var response = base.ChangeAccount(accountForChangeId, account);
+            Assert.IsTrue(response.StatusCode.Equals(HttpStatusCode.NoContent) || response.StatusCode.Equals(HttpStatusCode.BadRequest));
+            Assert.IsNotNull(response.Content);
+            if (response.StatusCode.Equals(HttpStatusCode.BadRequest))
+                return JsonConvert.DeserializeObject<ICollection<Error>>(response.Content);
+            else return null;
+        }
+
+        [AllureStep]
+        public new object DeleteAccount(string Id)
+        {
+            var response = base.DeleteAccount(Id);
+            Assert.IsTrue(response.StatusCode.Equals(HttpStatusCode.NoContent) || response.StatusCode.Equals(HttpStatusCode.NotFound));
+            Assert.IsNotNull(response.Content);
+            if (response.StatusCode.Equals(HttpStatusCode.NotFound))
+                return JsonConvert.DeserializeObject<ICollection<Error>>(response.Content);
+            else return null;
+        }
+
+        [AllureStep]
+        public Account GetAndReturnRandomAccount()
+        {
+            var allAccountCollection = GetAllAccounts();
+            allAccountCollection.Remove(allAccountCollection.First(a => a.Id.Equals(AccountBuilder.DefaultAcccount().Id)));
+            var randomAccount = allAccountCollection.FirstOrDefault();
+            return (Account)GetAccountById(randomAccount.Id);
         }
     }
 }

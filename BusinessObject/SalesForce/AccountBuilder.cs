@@ -23,5 +23,17 @@ namespace BusinessObject.SalesForce
             account.BillingZipPostalCode = Faker.LocationFaker.ZipCode();
             return account;
         }
+
+        public static Account WithoutRequiredProperty() => new Account()
+        {
+            AccountNumber = Faker.NumberFaker.Number().ToString(),
+            Phone = Faker.PhoneFaker.Phone()
+        };
+
+        public static Account WithEmptyRequiredProperty() => new Account()
+        {
+            AccountName = String.Empty,
+            AccountNumber = Faker.NumberFaker.Number().ToString()
+        };
     }
 }

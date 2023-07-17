@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObject.SalesForce.Model
 {
-    public class Error
+    public class Error : BaseModel
     {
         public string? ErrorCode { get; set; }
         public string? Message { get; set; }

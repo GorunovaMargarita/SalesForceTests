@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BusinessObject.SalesForce.Model
 {
-    public class Account
+    public class Account : BaseModel
     {
         [Newtonsoft.Json.JsonProperty("Id", DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore)]
         public string? Id { get; set; }
@@ -113,29 +113,13 @@ namespace BusinessObject.SalesForce.Model
         [Newtonsoft.Json.JsonProperty("ShippingAddress", DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore)]
         public BillingAddress? ShippingAddress { get; set; }
 
-
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            var propertyNames = ReflectionHelper.GetPropertyNames(this);
-            foreach(var property in propertyNames)
-            {
-                sb.Append(property);
-                sb.Append(": ");
-                sb.Append(ReflectionHelper.GetPropertyValue(property,this));
-                sb.Append(System.Environment.NewLine);
-            }
-            return sb.ToString();
-        }
     }
     public class BillingAddress : AddressEntity
     {
-
     }
 
     public class ShippingAddress : AddressEntity
     {
-
     }
 
     public class AddressEntity
