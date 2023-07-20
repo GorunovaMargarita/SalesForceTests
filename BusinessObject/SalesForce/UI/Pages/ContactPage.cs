@@ -15,10 +15,10 @@ namespace BusinessObject.SalesForce.UI.Pages
         Button contactsButton = new(By.XPath("//span[text()='Contacts']"));
         Input searchField = new(By.XPath("//Input[@name= 'Contact-search-input']"));
         By message = By.XPath("//div[@role='alertdialog']//..//span[contains(@class, 'Message')]");
-
-        protected Button Action { get; set; } = new(By.XPath("//td//a"));
-        protected Button Delete { get; set; } = new(By.XPath("//div[@role='menu']//a[@title='Delete']"));
-        protected Button ConfirmDelete { get; set; } = new(By.XPath("//button[@title='Delete']//span"));
+        static By action = By.XPath("//td//a");
+        Button actionButton { get; set; } = new(By.XPath("//td//a"));
+        Button deleteButton { get; set; } = new(By.XPath("//div[@role='menu']//a[@title='Delete']"));
+        Button confirmDeleteButton { get; set; } = new(By.XPath("//button[@title='Delete']//span"));
 
         public override ContactPage Open()
         {
@@ -44,11 +44,13 @@ namespace BusinessObject.SalesForce.UI.Pages
         public ContactPage DeleteContact(string accountName)
         {
             searchField.EnterText(accountName);
-            Action.GetElement().Click();
-            //driver.FindElement(By.XPath("//td//a")).Click();
-           // Action.ClickWithActions();
-            Delete.GetElement().Click();
-            ConfirmDelete.GetElement().Click();
+            // Action.GetElement().Click();
+            WaitHelper.WaitElementDisplayed(driver, action, 100);
+            actionButton.GetElement().Click();
+            //actionButton.ClickElementViaJs();
+            // actionButton.ClickWithActions();
+            deleteButton.GetElement().Click();
+            confirmDeleteButton.GetElement().Click();
             return this;
         }
 

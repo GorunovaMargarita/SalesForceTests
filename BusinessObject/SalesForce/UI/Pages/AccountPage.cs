@@ -16,11 +16,11 @@ namespace BusinessObject.SalesForce.UI.Pages
         Input searchField = new(By.XPath("//Input[@name= 'Account-search-input']"));
         By message = By.XPath("//div[@role='alertdialog']//..//span[contains(@class, 'Message')]");
         Button actionsButton = new("Show 3 more actions");
-        Button deleteButton = new("Delete");
-        protected Button Action { get; set; } = new(By.XPath("//td//a"));
-        protected Button Delete { get; set; } = new(By.XPath("//div[@role='menu']//a[@title='Delete']"));
-        protected Button Edit { get; set; } = new(By.XPath("//div[@role='menu']//a[@title='Edit']"));
-        protected Button ConfirmDelete { get; set; } = new(By.XPath("//button[@title='Delete']//span"));
+        static By action = By.XPath("//td//a");
+        protected Button actionButton { get; set; } = new(By.XPath("//td//a"));
+        protected Button deleteButton { get; set; } = new(By.XPath("//div[@role='menu']//a[@title='Delete']"));
+        protected Button editButton { get; set; } = new(By.XPath("//div[@role='menu']//a[@title='Edit']"));
+        Button confirmDeleteButton { get; set; } = new(By.XPath("//button[@title='Delete']//span"));
 
         public override AccountPage Open()
         {
@@ -70,10 +70,12 @@ namespace BusinessObject.SalesForce.UI.Pages
         public AccountPage DeleteAccount(string accountName)
         {
             searchField.EnterText(accountName);
-            Action.GetElement().Click();
-            //Action.ClickWithActions();
-            Delete.GetElement().Click();
-            ConfirmDelete.GetElement().Click();
+            WaitHelper.WaitElementDisplayed(driver, action, 100);
+            actionButton.GetElement().Click();
+            //actionButton.ClickElementViaJs();
+            // Action.ClickWithActions();
+            deleteButton.GetElement().Click();
+            confirmDeleteButton.GetElement().Click();
             return this;
         }
 
@@ -81,9 +83,9 @@ namespace BusinessObject.SalesForce.UI.Pages
         {
             searchField.EnterText(accountName);
             
-            Action.GetElement().Click();
+            actionButton.GetElement().Click();
             //Action.ClickWithActions();
-            Edit.GetElement().Click();
+            editButton.GetElement().Click();
             return new NewAccountModal();
         }
 
