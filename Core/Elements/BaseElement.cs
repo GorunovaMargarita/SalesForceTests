@@ -1,9 +1,6 @@
-﻿using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Helpers;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace Core.Elements
 {
@@ -26,6 +23,15 @@ namespace Core.Elements
         public object ClickElementViaJs()
         {
             return Browser.Instance.ExecuteScript("arguments[0].click();", GetElement());
+        }
+        public void ClickWithActions()
+        {
+            WaitHelper.WaitElement(WebDriver, locator);
+            new Actions(WebDriver)
+                .MoveToElement(GetElement())
+                .Click()
+                .Build()
+                .Perform();
         }
 
     }

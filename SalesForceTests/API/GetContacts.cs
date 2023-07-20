@@ -47,7 +47,7 @@ namespace Tests.API
             var unknownContactId = "Unknown";
             var errors = (ICollection<Error>)APISteps.contactSteps.GetContactById(unknownContactId);
 
-            errors.First().Should().BeEquivalentTo(MessageContainer.AccountAPI.ErrorEntityNotFound(unknownContactId));
+            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorEntityNotFoundOrNotAccessible(unknownContactId));
         }
     }
 }

@@ -1,12 +1,9 @@
-﻿using Core;
+﻿using BusinessObject.SalesForce.Model;
 using Core.API;
 using Core.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessObject.SalesForce.API.Services
 {
@@ -29,6 +26,26 @@ namespace BusinessObject.SalesForce.API.Services
         public RestResponse GetContactById(string id)
         {
             var request = new RestRequest(ContactByIdEndpoint).AddUrlSegment("id", id);
+            return apiClient.Execute(request);
+        }
+
+        public RestResponse CreateContact(Contact contact)
+        {
+            var request = new RestRequest(ContactEndpoint, Method.Post);
+            request.AddBody(JsonConvert.SerializeObject(contact));
+            return apiClient.Execute(request);
+        }
+
+        public RestResponse ChangeContact(string id, JObject contact)
+        {
+            var request = new RestRequest(ContactByIdEndpoint, Method.Patch).AddUrlSegment("id", id);
+            request.AddBody(JsonConvert.SerializeObject(contact));
+            return apiClient.Execute(request);
+        }
+
+        public RestResponse DeleteContact(string id)
+        {
+            var request = new RestRequest(ContactByIdEndpoint, Method.Delete).AddUrlSegment("id", id);
             return apiClient.Execute(request);
         }
     }

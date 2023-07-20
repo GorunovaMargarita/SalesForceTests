@@ -47,7 +47,7 @@ namespace Tests.API
             var unknownAccountId = "Unknown";
             var errors = (ICollection<Error>)APISteps.accountSteps.GetAccountById(unknownAccountId);
 
-            errors.First().Should().BeEquivalentTo(MessageContainer.AccountAPI.ErrorEntityNotFound(unknownAccountId));
+            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorEntityNotFoundOrNotAccessible(unknownAccountId));
         }
     }
 }

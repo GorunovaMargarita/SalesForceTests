@@ -67,10 +67,10 @@ namespace Tests.API
         [AllureSubSuite("Create accounts: negative")]
         public void POSTCreateAccount_RequiredPropertyEmpty_BadRequest()
         {
-            var accountForCreation = new Account() { AccountName = String.Empty };
+            var accountForCreation = AccountBuilder.WithEmptyRequiredProperty();
             var errors = (ICollection<Error>)APISteps.accountSteps.CreateAccount(accountForCreation);
 
-            errors.First().Should().BeEquivalentTo(MessageContainer.AccountAPI.ErrorRequiredFieldMissing("Name"));
+            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorRequiredFieldMissing("Name"));
         }
 
         [Test]
@@ -80,10 +80,10 @@ namespace Tests.API
         [AllureSubSuite("Create accounts: negative")]
         public void POSTCreateAccount_RequiredPropertyMiss_BadRequest()
         {
-            var accountForCreation = new Account() { AccountNumber = Faker.NumberFaker.Number().ToString() };
+            var accountForCreation = AccountBuilder.WithoutRequiredProperty();
             var errors = (ICollection<Error>)APISteps.accountSteps.CreateAccount(accountForCreation);
 
-            errors.First().Should().BeEquivalentTo(MessageContainer.AccountAPI.ErrorRequiredFieldMissing("Name"));
+            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorRequiredFieldMissing("Name"));
         }
     }
 }

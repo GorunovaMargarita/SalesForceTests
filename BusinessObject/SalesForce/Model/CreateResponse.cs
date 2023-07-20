@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObject.SalesForce.Model
 {
-    public class CreateResponse
+    public class CreateResponse : BaseModel
     {
         public string? Id { get; set; }
         public bool? Success { get; set; }

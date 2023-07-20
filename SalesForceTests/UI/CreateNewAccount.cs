@@ -17,13 +17,12 @@ namespace Tests.UI
         [AllureSubSuite("CreateNewAccount")]
         public void CreateNewAccount_OnlyRequiredAtts_Created()
         {
-            var account = new Account();
-            account.AccountName = Faker.InternetFaker.Email();
+            var account = AccountBuilder.WithOnlyRequiredProperties();
 
             appHelper.InitAccountCreation(UserBuilder.GetSalesForceUser())
                      .FillNewAccountForm(account)
                      .ConfirmAccountCreation()
-                     .CheckSuccessMessage(account.AccountName)
+                     .CheckCreateSuccessMessage(account.AccountName)
                      .ReloadAccounts()
                      .CheckAccountWithAttExist(account.AccountName);
         }
@@ -55,7 +54,7 @@ namespace Tests.UI
             appHelper.InitAccountCreation(UserBuilder.GetSalesForceUser())
                      .FillNewAccountForm(account)
                      .ConfirmAccountCreation()
-                     .CheckSuccessMessage(account.AccountName)
+                     .CheckCreateSuccessMessage(account.AccountName)
                      .ReloadAccounts()
                      .CheckAccountWithAttExist(account.AccountName);
         }

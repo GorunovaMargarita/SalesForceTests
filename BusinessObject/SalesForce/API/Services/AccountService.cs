@@ -1,14 +1,10 @@
 ﻿using BusinessObject.SalesForce.Model;
-using Core;
 using Core.API;
 using Core.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BusinessObject.SalesForce.API.Services
 {
@@ -37,8 +33,20 @@ namespace BusinessObject.SalesForce.API.Services
         public RestResponse CreateAccount(Account account)
         {
             var request = new RestRequest(AccountEndpoint, Method.Post);
-            var body = JsonConvert.SerializeObject(account);
-            request.AddBody(body);
+            request.AddBody(JsonConvert.SerializeObject(account));
+            return apiClient.Execute(request);
+        }
+
+        public RestResponse ChangeAccount(string id, JObject account)
+        {
+            var request = new RestRequest(AccountByIdEndpoint, Method.Patch).AddUrlSegment("id", id);
+            request.AddBody(JsonConvert.SerializeObject(account));
+            return apiClient.Execute(request);
+        }
+
+        public RestResponse DeleteAccount(string id)
+        {
+            var request = new RestRequest(AccountByIdEndpoint, Method.Delete).AddUrlSegment("id", id);
             return apiClient.Execute(request);
         }
     }

@@ -21,9 +21,8 @@ namespace BusinessObject.SalesForce.UI
         {
             new LoginPage()
                .Open()
-               .Login(user);
-            new ContactPage()
-               .Open()
+               .Login(user)
+               .GoToContactPage()
                .OpenNewContactModal();
             return new NewContactModal();
         }
@@ -32,11 +31,36 @@ namespace BusinessObject.SalesForce.UI
         {
             new LoginPage()
                .Open()
-               .Login(user);
-            new AccountPage()
-               .Open()
+               .Login(user)
+               .GoToAccountPage()
                .OpenNewAccountModal();
             return new NewAccountModal();
+        }
+
+        public AccountPage OpenAccountPage(User user = null)
+        {
+            if(user == null)
+            {
+                user = UserBuilder.GetSalesForceUser();
+            }
+            new LoginPage()
+                .Open()
+                .Login(user)
+                .GoToAccountPage();
+            return new AccountPage();
+        }
+
+        public ContactPage OpenContactPage(User user = null)
+        {
+            if (user == null)
+            {
+                user = UserBuilder.GetSalesForceUser();
+            }
+            new LoginPage()
+                .Open()
+                .Login(user)
+                .GoToContactPage();
+            return new ContactPage();
         }
     }
 }
