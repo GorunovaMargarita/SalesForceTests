@@ -1,17 +1,14 @@
 ﻿using BusinessObject.SalesForce.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BusinessObject.SalesForce
 {
     public class MessageContainer
     {
-        public class AccountPage
+        public class UI
         {
-            public static string CreationSuccessMessage(string accountName) => $"Account \"{accountName}\" was created.";
+            public static string CreationSuccessMessage(string entityName, string accountName) => $"{entityName} \"{accountName}\" was created.";
+            public static string DeleteSuccessMessage(string entityName, string accountName) => $"{entityName} \"{accountName}\" was deleted. Undo" ;
         }
 
         public class API

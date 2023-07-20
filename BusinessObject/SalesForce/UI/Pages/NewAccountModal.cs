@@ -90,6 +90,52 @@ namespace BusinessObject.SalesForce.UI.Pages
 
             return this;
         }
+
+        [AllureStep]
+        public NewAccountModal EditData(Account account)
+        {
+            if (!account.AccountName.Equals(accountNameInput))
+            {
+                accountNameInput.GetElement().Clear();
+                accountNameInput.EnterText(account.AccountName);
+            }
+            /*
+            accountNameInput.EnterText(account.AccountName);
+            parentAccountDropDown.Select(account.ParentAccount);
+            accountNumberInput.EnterText(account.AccountNumber);
+            accountSite.EnterText(account.AccountSite);
+            typeDropDown.Select(account.Type);
+            industryDropDown.Select(account.Industry);
+            annualRevenueInput.EnterText(account.AnnualRevenue);
+            ratingDropDown.Select(account.Rating);
+            phoneInput.EnterText(account.Phone);
+            faxInput.EnterText(account.Fax);
+            websiteInput.EnterText(account.Website);
+            tickerSymbolInput.EnterText(account.TickerSymbol);
+            ownershipDropDown.Select(account.Ownership);
+            employeesInput.EnterText(account.Employees);
+            sicCodeInput.EnterText(account.SICCode);
+            billingStreetInput.EnterText(account.BillingStreet);
+            billingCityInput.EnterText(account.BillingCity);
+            billingStateProvinceInput.EnterText(account.BillingStateProvince);
+            billingCountryInput.EnterText(account.BillingCountry);
+            shippingStreetInput.EnterText(account.ShippingStreet);
+            shippingCityInput.EnterText(account.ShippingCity);
+            shippingZipPostalCodeInput.EnterText(account.ShippingZipPostalCode);
+            shippingStateProvinceInput.EnterText(account.ShippingStateProvince);
+            shippingCountryInput.EnterText(account.ShippingCountry);
+            customerPriorityDropDown.Select(account.CustomerPriority);
+            slaExpirationDateInput.EnterText(account.SLAExpirationDate);
+            numberOfLocationsInput.EnterText(account.NumberOfLocations);
+            activeDropDown.Select(account.Active);
+            slaDropDown.Select(account.SLA);
+            slaSerialNumberInput.EnterText(account.SLASerialNumber);
+            upsellOpportunityInput.EnterText(account.UpsellOpportunity);
+            descriptionInput.EnterText(account.Description);*/
+
+            return this;
+        }
+
         [AllureStep]
         public AccountPage ConfirmAccountCreation()
         {

@@ -2,21 +2,23 @@
 using Core.Elements;
 using Core.Helpers;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Core;
+using Core.Configuration;
 
 namespace BusinessObject.SalesForce.UI.Pages
 {
     public class ContactPage : BasePage
     {
-        private const string Url = "https://ooomtsdi-dev-ed.develop.lightning.force.com/lightning/o/Contact/list?filterName=Recent";
+        private string Url = $"https://{Configurator.Browser.Server}/lightning/o/Contact/list?filterName=Recent";
+
         Button newContactButton = new(By.XPath("//div[@title='New']"));
         Button contactsButton = new(By.XPath("//span[text()='Contacts']"));
         Input searchField = new(By.XPath("//Input[@name= 'Contact-search-input']"));
+        By message = By.XPath("//div[@role='alertdialog']//..//span[contains(@class, 'Message')]");
+
+        protected Button Action { get; set; } = new(By.XPath("//td//a"));
+        protected Button Delete { get; set; } = new(By.XPath("//div[@role='menu']//a[@title='Delete']"));
+        protected Button ConfirmDelete { get; set; } = new(By.XPath("//button[@title='Delete']//span"));
 
         public override ContactPage Open()
         {
@@ -36,6 +38,17 @@ namespace BusinessObject.SalesForce.UI.Pages
             driver.Navigate().Refresh();
             WaitHelper.WaitPageLoaded(driver);
             contactsButton.ClickElementViaJs();
+            return this;
+        }
+
+        public ContactPage DeleteContact(string accountName)
+        {
+            searchField.EnterText(accountName);
+            Action.GetElement().Click();
+            //driver.FindElement(By.XPath("//td//a")).Click();
+           // Action.ClickWithActions();
+            Delete.GetElement().Click();
+            ConfirmDelete.GetElement().Click();
             return this;
         }
 
@@ -59,6 +72,19 @@ namespace BusinessObject.SalesForce.UI.Pages
             if (elements.Count() > 0)
                 return true;
             else return false;
+        }
+
+        public ContactPage CheckDeleteSuccessMessage(string accountName)
+        {
+
+            WaitHelper.WaitElement(driver, message);
+            var element = driver.FindElement(message);
+            var text = element.Text;
+            var expectedText = MessageContainer.UI.DeleteSuccessMessage("Contact", accountName);
+            Log.Instance.Logger.Info($"Getted message: <{text}>, expected message: <{expectedText}>");
+
+            text.Should().Be(expectedText);
+            return this;
         }
     }
 }

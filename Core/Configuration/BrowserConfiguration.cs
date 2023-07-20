@@ -15,5 +15,8 @@ namespace Core.Configuration
         public int TimeOut { get; set; }
         public string UserName { get; set; }
         public string UserPassword { get; set; }
+
+        public string Server { get; set; }
+        public string DownloadFolder { get; set; }
     }
 }

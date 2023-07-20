@@ -10,7 +10,6 @@ namespace Tests.API
 {
     public class TestBaseAPI : TestBase
     {
-        //protected AccountSteps accountHelper;
         protected APISteps APISteps;
 
         [OneTimeSetUp]

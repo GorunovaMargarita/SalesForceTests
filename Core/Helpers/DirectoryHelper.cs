@@ -4,6 +4,7 @@ namespace Core.Helpers
 {
     public static class DirectoryHelper
     {
+        //set DownloadFolder value in your appsettings.json in Browser section
         public static bool CheckFileExist(string fileName, string? path = null) 
         {
             path ??= TestContext.Parameters.Get("DownloadFolder");

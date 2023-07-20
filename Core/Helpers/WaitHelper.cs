@@ -25,5 +25,7 @@ namespace Core.Helpers
         {
             new WebDriverWait(driver, TimeSpan.FromSeconds(time)).Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
         }
+
+
     }
 }

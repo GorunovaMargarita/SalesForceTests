@@ -15,7 +15,7 @@ namespace Core
             if (Configurator.Browser.Headless) options.AddArgument("--headless");
             options.AddArgument("--disable-gpu");
             options.AddArgument("--start-maximized");
-
+            options.AddUserProfilePreference("download.default_directory", Configurator.Browser.DownloadFolder);
             return new ChromeDriver(options);
         }
 

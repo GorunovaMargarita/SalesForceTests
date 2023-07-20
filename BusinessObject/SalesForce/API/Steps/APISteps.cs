@@ -13,8 +13,10 @@ namespace BusinessObject.SalesForce.API.Steps
 
         public APISteps()
         {
-            accountSteps = new AccountSteps();
-            contactSteps = new ContactSteps();
+            if (accountSteps == null) 
+                accountSteps = new AccountSteps();
+            if (contactSteps == null)
+                contactSteps = new ContactSteps();
         }
     }
 }
