@@ -12,8 +12,8 @@ namespace Tests.UI
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("UI Tests")]
-        [AllureSubSuite("DeleteAccount")]
-        public void ChangeAccount_ByName_Ok()
+        [AllureSubSuite("Change account")]
+        public void ChangeAccount_AccountName_Ok()
         {
             var accountName = APISteps.accountSteps.GetAndReturnRandomAccount().AccountName;
             var patchedAccount = new Account() { AccountName = Faker.InternetFaker.Email() };
