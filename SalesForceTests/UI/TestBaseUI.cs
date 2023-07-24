@@ -1,17 +1,24 @@
-﻿using BusinessObject.SalesForce.API.Steps;
-using BusinessObject.SalesForce.UI;
+﻿using BusinessObject.SalesForce.UI.Steps;
 using Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OpenQA.Selenium;
+using Tests.API;
 
 namespace Tests.UI
 {
-    public class TestBaseUI : TestBase
+    public class TestBaseUI : TestBaseAPI
     {
-        protected ApplicationHelper appHelper = new ApplicationHelper(Browser.Instance.Driver);
-        protected APISteps APISteps = new APISteps();
+        protected UiSteps UiSteps = new();
+
+        [TearDown]
+        public void TearDown() 
+        {
+            if (TestContext.CurrentContext.Result.Outcome.Status == NUnit.Framework.Interfaces.TestStatus.Failed)
+            {
+                Screenshot screenshot = ((ITakesScreenshot)Browser.Instance.Driver).GetScreenshot();
+                byte[] bytes = screenshot.AsByteArray;
+                allure.AddAttachment("Screenshot", "image/png", bytes);
+            }
+            Browser.Instance.CloseBrowser();
+        } 
     }
 }

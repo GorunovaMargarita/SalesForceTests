@@ -12,6 +12,10 @@ namespace BusinessObject.SalesForce.API.Steps
 {
     public class AccountSteps : AccountService
     {
+        /// <summary>
+        /// Get all accounts
+        /// </summary>
+        /// <returns>Collection of accounts</returns>
         [AllureStep]
         public new ICollection<Account> GetAllAccounts()
         {
@@ -22,59 +26,75 @@ namespace BusinessObject.SalesForce.API.Steps
             return JsonConvert.DeserializeObject<ICollection<Account>>(jsonResponse.SelectToken("$.recentItems").ToString());
         }
 
+        /// <summary>
+        /// Get account by Id
+        /// </summary>
+        /// <param name="Id">Unique account Id</param>
+        /// <returns>Account if success or collection of errors if not success</returns>
         [AllureStep]
-        public new object GetAccountById(string Id)
+        public new T GetAccountById<T>(string Id)
         {
             var response = base.GetAccountById(Id);
             Assert.IsTrue(response.StatusCode.Equals(HttpStatusCode.OK) || response.StatusCode.Equals(HttpStatusCode.NotFound));
             Assert.IsNotNull(response.Content);
-            if(response.StatusCode.Equals(HttpStatusCode.OK)) 
-                return JsonConvert.DeserializeObject<Account>(response.Content);
-            else
-                return JsonConvert.DeserializeObject<ICollection<Error>>(response.Content);
+            return JsonConvert.DeserializeObject<T>(response.Content);
         }
 
+        /// <summary>
+        /// Create account
+        /// </summary>
+        /// <param name="account">Account model</param>
+        /// <returns></returns>
         [AllureStep]
-        public new object CreateAccount(Account account)
+        public new T CreateAccount<T>(Account account)
         {
             var response = base.CreateAccount(account);
             Assert.IsTrue(response.StatusCode.Equals(HttpStatusCode.Created) || response.StatusCode.Equals(HttpStatusCode.BadRequest));
             Assert.IsNotNull(response.Content);
-            if (response.StatusCode.Equals(HttpStatusCode.Created))
-                return JsonConvert.DeserializeObject<CreateResponse>(response.Content);
-            else
-                return JsonConvert.DeserializeObject<ICollection<Error>>(response.Content);
+            return JsonConvert.DeserializeObject<T>(response.Content);
         }
 
+        /// <summary>
+        /// Change account
+        /// </summary>
+        /// <param name="accountForChangeId">Id account for change</param>
+        /// <param name="account">JObject Account model. Set fields for change only</param>
+        /// <returns>CreateResponse if success or collection of errors if not success</returns>
         [AllureStep]
-        public new object ChangeAccount(string accountForChangeId, JObject account)
+        public new T ChangeAccount<T>(string accountForChangeId, JObject account)
         {
             var response = base.ChangeAccount(accountForChangeId, account);
             Assert.IsTrue(response.StatusCode.Equals(HttpStatusCode.NoContent) || response.StatusCode.Equals(HttpStatusCode.BadRequest));
             Assert.IsNotNull(response.Content);
-            if (response.StatusCode.Equals(HttpStatusCode.BadRequest))
-                return JsonConvert.DeserializeObject<ICollection<Error>>(response.Content);
-            else return null;
+            return JsonConvert.DeserializeObject<T>(response.Content);
+            //else return null;
         }
 
+        /// <summary>
+        /// Delete account
+        /// </summary>
+        /// <param name="Id">Unique account Id</param>
+        /// <returns>Empty or collection of errors if not success</returns>
         [AllureStep]
-        public new object DeleteAccount(string Id)
+        public new T DeleteAccount<T>(string Id)
         {
             var response = base.DeleteAccount(Id);
             Assert.IsTrue(response.StatusCode.Equals(HttpStatusCode.NoContent) || response.StatusCode.Equals(HttpStatusCode.NotFound));
             Assert.IsNotNull(response.Content);
-            if (response.StatusCode.Equals(HttpStatusCode.NotFound))
-                return JsonConvert.DeserializeObject<ICollection<Error>>(response.Content);
-            else return null;
+            return JsonConvert.DeserializeObject<T>(response.Content);
         }
 
+        /// <summary>
+        /// Get random account
+        /// </summary>
+        /// <returns>Account</returns>
         [AllureStep]
         public Account GetAndReturnRandomAccount()
         {
             var allAccountCollection = GetAllAccounts();
             allAccountCollection.Remove(allAccountCollection.First(a => a.Id.Equals(AccountBuilder.DefaultAcccount().Id)));
             var randomAccount = allAccountCollection.FirstOrDefault();
-            return (Account)GetAccountById(randomAccount.Id);
+            return GetAccountById<Account>(randomAccount.Id);
         }
     }
 }

@@ -31,7 +31,6 @@ namespace Core.Elements
                 action.MoveToElement(element)
                       .Click()
                       .Perform();
-                //WebDriver.FindElement(By.XPath($"//*[@title='{option}']")).Click();
             }
         }
     }

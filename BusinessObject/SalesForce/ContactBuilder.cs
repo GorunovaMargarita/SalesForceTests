@@ -20,10 +20,12 @@ namespace BusinessObject.SalesForce
             return contact;
         }
 
-        public static Contact WithoutRequiredProperty() => new Contact() { MailingCity = Faker.LocationFaker.City(),
-                                                                           FirstName = Faker.NameFaker.FirstName(),
-                                                                           Birthdate = Faker.DateTimeFaker.BirthDay().ToString("yyyy-MM-dd")
-                                                                         };
+        public static Contact WithoutRequiredProperty() => new Contact()
+        {
+            MailingCity = Faker.LocationFaker.City(),
+            FirstName = Faker.NameFaker.FirstName(),
+            Birthdate = Faker.DateTimeFaker.BirthDay().ToString("yyyy-MM-dd")
+        };
 
         public static Contact WithBirtdateIncorrectFormat() => new Contact()
         {

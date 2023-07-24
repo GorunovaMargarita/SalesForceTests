@@ -38,6 +38,7 @@ namespace BusinessObject.SalesForce.UI.Pages
         public AccountPage CheckCreateSuccessMessage(string accountName)
         {
             WaitHelper.WaitElement(driver, message);
+            WaitHelper.WaitElementDisplayed(driver, message, 100);
             var element = driver.FindElement(message);
             var text = element.Text;
             var expectedText = MessageContainer.UI.CreationSuccessMessage("Account", accountName);
@@ -82,7 +83,7 @@ namespace BusinessObject.SalesForce.UI.Pages
         public NewAccountModal InitAccountChange(string accountName)
         {
             searchField.EnterText(accountName);
-            
+            WaitHelper.WaitElementDisplayed(driver, action, 100);
             actionButton.GetElement().Click();
             //Action.ClickWithActions();
             editButton.GetElement().Click();

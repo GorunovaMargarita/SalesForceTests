@@ -29,12 +29,19 @@ namespace Core
             driver.Manage().Window.Maximize();
         }
 
+        /// <summary>
+        /// Close driver and release resources
+        /// </summary>
         public void CloseBrowser()
         {
             driver?.Dispose();
             BrowserInstances.Value = null;
         }
 
+       /// <summary>
+       /// Go to url
+       /// </summary>
+       /// <param name="url"></param>
         public void NavigateToUrl(string url)
         {
             driver.Navigate().GoToUrl(url);

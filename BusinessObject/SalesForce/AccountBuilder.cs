@@ -1,10 +1,4 @@
 ﻿using BusinessObject.SalesForce.Model;
-using Core.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessObject.SalesForce
 {
@@ -34,6 +28,25 @@ namespace BusinessObject.SalesForce
         {
             AccountName = String.Empty,
             AccountNumber = Faker.NumberFaker.Number().ToString()
+        };
+
+        public static Account GetAccountWithFullAccountInfoPart() => new Account()
+        {
+            AccountName = Faker.InternetFaker.Email(),
+            AccountSite = Faker.InternetFaker.Email(),
+            ParentAccount = DefaultAcccount().AccountName,
+            AccountNumber = Faker.NumberFaker.Number().ToString(),
+            Type = "Other",
+            Industry = "Education",
+            AnnualRevenue = Faker.NumberFaker.Number(4).ToString(),
+            Rating = "Hot",
+            Phone = Faker.PhoneFaker.Phone().ToString(),
+            Fax = Faker.PhoneFaker.Phone().ToString(),
+            Website = Faker.InternetFaker.Url(),
+            TickerSymbol = Faker.StringFaker.Alpha(5),
+            Ownership = "Private",
+            Employees = Faker.NumberFaker.Number(3).ToString(),
+            SICCode = Faker.NumberFaker.Number(6).ToString()
         };
     }
 }
