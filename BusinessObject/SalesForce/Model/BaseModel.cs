@@ -1,9 +1,6 @@
 ﻿using Core.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BusinessObject.SalesForce.Model
 {
@@ -11,16 +8,16 @@ namespace BusinessObject.SalesForce.Model
     {
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var propertyNames = ReflectionHelper.GetPropertyNames(this);
             foreach (var property in propertyNames)
             {
-                sb.Append(property);
-                sb.Append(": ");
-                sb.Append(ReflectionHelper.GetPropertyValue(property, this));
-                sb.Append(System.Environment.NewLine);
+                stringBuilder.Append(property);
+                stringBuilder.Append(": ");
+                stringBuilder.Append(ReflectionHelper.GetPropertyValue(property, this));
+                stringBuilder.Append(System.Environment.NewLine);
             }
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 }

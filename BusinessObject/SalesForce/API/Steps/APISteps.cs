@@ -6,17 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessObject.SalesForce.API.Steps
 {
-    public class APISteps
+    public class ApiSteps
     {
-        public AccountSteps accountSteps { get; }
-        public ContactSteps contactSteps { get; }
-
-        public APISteps()
-        {
-            if (accountSteps == null) 
-                accountSteps = new AccountSteps();
-            if (contactSteps == null)
-                contactSteps = new ContactSteps();
-        }
+        public AccountSteps AccountSteps = new();
+        public ContactSteps ContactSteps = new();
     }
 }
