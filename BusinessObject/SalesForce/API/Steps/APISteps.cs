@@ -8,7 +8,7 @@ namespace BusinessObject.SalesForce.API.Steps
 {
     public class ApiSteps
     {
-        public AccountSteps accountSteps = new();
-        public ContactSteps contactSteps = new();
+        public AccountSteps AccountSteps = new();
+        public ContactSteps ContactSteps = new();
     }
 }

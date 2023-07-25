@@ -4,7 +4,7 @@ namespace BusinessObject.SalesForce.UI.Steps
 {
     public class UiSteps
     {
-        public AccountSteps accountSteps = new();
-        public ContactSteps contactSteps = new();
+        public AccountSteps AccountSteps = new();
+        public ContactSteps ContactSteps = new();
     }
 }

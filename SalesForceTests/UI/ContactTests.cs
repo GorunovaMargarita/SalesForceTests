@@ -24,7 +24,7 @@ namespace Tests.UI
             var contact = new Contact();
             contact.LastName = Faker.NameFaker.LastName();
 
-            UiSteps.contactSteps.InitContactCreation()
+            UiSteps.ContactSteps.InitContactCreation()
                                 .FillNewContactForm(contact)
                                 .ConfirmContactCreation()
                                 .ReloadContacts()
@@ -41,7 +41,7 @@ namespace Tests.UI
             var contact = new Contact();
             contact.LastName = Faker.NameFaker.LastName() + DateTime.Now.ToString();
 
-            UiSteps.contactSteps.InitContactCreation()
+            UiSteps.ContactSteps.InitContactCreation()
                                 .FillNewContactForm(contact)
                                 .CancelContractCreation()
                                 .ReloadContacts()
@@ -60,11 +60,11 @@ namespace Tests.UI
         [AllureSubSuite("DeleteContact")]
         public void DeleteContact_ByName_Ok()
         {
-            var accountName = ApiSteps.contactSteps.GetAndReturnRandomContact().AccountName;
-            UiSteps.contactSteps.OpenContactPage()
+            var accountName = ApiSteps.ContactSteps.GetAndReturnRandomContact().AccountName;
+            UiSteps.ContactSteps.OpenContactPage()
                                 .DeleteContact(accountName)
                                 .CheckDeleteSuccessMessage(accountName);
-            ApiSteps.contactSteps.GetAllContacts().Should().NotContain(x => x.AccountName.Equals(accountName));
+            ApiSteps.ContactSteps.GetAllContacts().Data.Should().NotContain(x => x.AccountName.Equals(accountName));
         }
         #endregion
     }

@@ -5,6 +5,8 @@ using NUnit.Allure.Attributes;
 using FluentAssertions;
 using Core;
 using Newtonsoft.Json.Linq;
+using System.Collections.ObjectModel;
+using System.Net;
 
 namespace Tests.API
 {
@@ -20,8 +22,7 @@ namespace Tests.API
         [AllureSubSuite("Create accounts: positive")]
         public void Post_CreateContact_OnlyRequiredAttributes_Created()
         {
-            var contactForCreation = ContactBuilder.WithOnlyRequiredProperties();
-            SharedStep_SendAndCheckSuccess(contactForCreation);
+            SharedStep_SendAndCheckSuccess(ContactBuilder.WithOnlyRequiredProperties());
         }
 
         [Test]
@@ -31,8 +32,7 @@ namespace Tests.API
         [AllureSubSuite("Create accounts: positive")]
         public void Post_CreateContact_WithFullName_Created()
         {
-            var contactForCreation = ContactBuilder.WithFullName();
-            SharedStep_SendAndCheckSuccess(contactForCreation);
+            SharedStep_SendAndCheckSuccess(ContactBuilder.WithFullName());
         }
 
         [Test]
@@ -40,12 +40,13 @@ namespace Tests.API
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
         [AllureSubSuite("Create contacts: negative")]
-        public void Post_CreateContact_RequiredPropertyNotSet_BadRequest()
+        public void Post_CreateContact_RequiredPropertyMiss_BadRequest()
         {
-            var contactForCreation = ContactBuilder.WithoutRequiredProperty();
-            var errors = ApiSteps.contactSteps.CreateContact<ICollection<Error>>(contactForCreation);
+            var response = ApiSteps.ContactSteps.CreateContact(ContactBuilder.WithoutRequiredProperty());
 
-            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorRequiredFieldMissing("LastName"));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeEquivalentTo(new Collection<Error>() { MessageContainer.API.ErrorRequiredFieldMissing("LastName") });
         }
 
         [Test]
@@ -56,26 +57,31 @@ namespace Tests.API
         public void Post_CreateContact_IncorrectBirthdateFormat_BadRequest()
         {
             var contactForCreation = ContactBuilder.WithBirtdateIncorrectFormat();
-            var errors = ApiSteps.contactSteps.CreateContact<ICollection<Error>>(contactForCreation);
+            var response = ApiSteps.ContactSteps.CreateContact(contactForCreation);
 
-            errors.First().Message.Should().Contain(MessageContainer.API.ErrorJsonParse(contactForCreation.Birthdate).Message);
-            errors.First().ErrorCode.Should().Be(MessageContainer.API.parseErrorCode);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.First().Message.Should().Contain(MessageContainer.API.ErrorJsonParse(contactForCreation.Birthdate).Message);
+            response.Errors.First().ErrorCode.Should().Be(MessageContainer.API.parseErrorCode);
         }
 
         private void SharedStep_SendAndCheckSuccess(Contact contactForCreation)
         {
-            var response = ApiSteps.contactSteps.CreateContact<CreateResponse>(contactForCreation);
-            response.Success.Should().BeTrue();
-            response.Errors.Should().BeEmpty();
+            var response = ApiSteps.ContactSteps.CreateContact(contactForCreation);
 
-            var createdContact = ApiSteps.contactSteps.GetContactById<Contact>(response.Id);
+            response.StatusCode.Should().Be(HttpStatusCode.Created.ToString());
+            response.Errors.Should().BeNull();
+            response.Data.Success.Should().BeTrue();
+            response.Data.Id.Should().NotBeNull();
+
+            var getResponse = ApiSteps.ContactSteps.GetContactById(response.Data.Id);
 
             //system set AccountName = FirstName + LastName
             contactForCreation.AccountName = (contactForCreation.FirstName + " " + contactForCreation.LastName).Trim();
 
-            createdContact.Should().BeEquivalentTo(contactForCreation, options => options.Excluding(o => o.Id));
-            createdContact.Id.Should().NotBeEmpty();
-            Log.Instance.Logger.Info($"Contact with Id: {createdContact.Id} was created");
+            getResponse.Data.Should().BeEquivalentTo(contactForCreation, options => options.Excluding(o => o.Id));
+            getResponse.Data.Id.Should().Be(response.Data.Id);
+            Log.Instance.Logger.Info($"Contact with Id: {getResponse.Data.Id} was created");
         }
         #endregion
 
@@ -89,8 +95,11 @@ namespace Tests.API
         [AllureSubSuite("GET contacts")]
         public void Get_AllContacts_OK()
         {
-            var contacts = ApiSteps.contactSteps.GetAllContacts();
-            contacts.Should().Contain(x => x.AccountName.Equals(controlContact.AccountName));
+            var response = ApiSteps.ContactSteps.GetAllContacts();
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK.ToString());
+            response.Errors.Should().BeNull();
+            response.Data.Should().Contain(x => x.AccountName.Equals(controlContact.AccountName));
             Log.Instance.Logger.Info($"Contact collection contains contact {controlContact.AccountName}");
         }
 
@@ -99,11 +108,14 @@ namespace Tests.API
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
         [AllureSubSuite("GET contacts")]
-        public void Get_ById_OK()
+        public void Get_ContactById_OK()
         {
-            var contact = ApiSteps.contactSteps.GetContactById<Contact>(controlContact.Id);
-            contact.Should().BeEquivalentTo(controlContact);
-            Log.Instance.Logger.Info($"Getted default contact:\r\n{contact}");
+            var response = ApiSteps.ContactSteps.GetContactById(controlContact.Id);
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK.ToString());
+            response.Data.Should().BeEquivalentTo(controlContact);
+            response.Errors.Should().BeNull();
+            Log.Instance.Logger.Info($"Getted default contact:\r\n{response.Data}");
         }
 
         [Test]
@@ -111,12 +123,14 @@ namespace Tests.API
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
         [AllureSubSuite("GET contacts")]
-        public void Get_ById_UnknownContact_OK()
+        public void Get_ContactById_UnknownContact_OK()
         {
             var unknownContactId = "Unknown";
-            var errors = ApiSteps.contactSteps.GetContactById<ICollection<Error>>(unknownContactId);
+            var response = ApiSteps.ContactSteps.GetContactById(unknownContactId);
 
-            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorEntityNotFoundOrNotAccessible(unknownContactId));
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeEquivalentTo(new Collection<Error>() { MessageContainer.API.ErrorEntityNotFoundOrNotAccessible(unknownContactId) });
         }
         #endregion
 
@@ -128,18 +142,20 @@ namespace Tests.API
         [AllureSubSuite("Change contacts: positive")]
         public void Patch_ChangeContact_LastName_NoContent()
         {
-            var contact = ApiSteps.contactSteps.GetAndReturnRandomContact();
+            var contact = ApiSteps.ContactSteps.GetAndReturnRandomContact();
             var patchedContact = new Contact() { LastName = Faker.NameFaker.LastName() };
 
-            var response = ApiSteps.contactSteps.ChangeContact<string>(contact.Id, JObject.FromObject(patchedContact));
+            var response = ApiSteps.ContactSteps.ChangeContact(contact.Id, JObject.FromObject(patchedContact));
 
-            response.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeNull();
 
-            var resultAccount = ApiSteps.contactSteps.GetContactById<Contact>(contact.Id);
+            var resultContact = ApiSteps.ContactSteps.GetContactById(contact.Id).Data;
 
             contact.LastName = patchedContact.LastName;
             contact.AccountName = (contact.FirstName + " " + patchedContact.LastName).Trim();
-            resultAccount.Should().BeEquivalentTo(contact);
+            resultContact.Should().BeEquivalentTo(contact);
         }
 
         [Test]
@@ -149,17 +165,19 @@ namespace Tests.API
         [AllureSubSuite("Change contacts: positive")]
         public void Patch_ChangeContact_Phone_NoContent()
         {
-            var contact = ApiSteps.contactSteps.GetAndReturnRandomContact();
+            var contact = ApiSteps.ContactSteps.GetAndReturnRandomContact();
             var patchedContact = new Account() { Phone = Faker.PhoneFaker.Phone() };
 
-            var response = ApiSteps.contactSteps.ChangeContact<string>(contact.Id, JObject.FromObject(patchedContact));
+            var response = ApiSteps.ContactSteps.ChangeContact(contact.Id, JObject.FromObject(patchedContact));
 
-            response.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeNull();
 
-            var resultAccount = ApiSteps.contactSteps.GetContactById<Contact>(contact.Id);
+            var Contact = ApiSteps.ContactSteps.GetContactById(contact.Id).Data;
 
             contact.Phone = patchedContact.Phone;
-            resultAccount.Should().BeEquivalentTo(contact);
+            Contact.Should().BeEquivalentTo(contact);
         }
 
         [Test]
@@ -169,14 +187,14 @@ namespace Tests.API
         [AllureSubSuite("Change contacts: negative")]
         public void Patch_ChangeContact_InvalidField_BadRequest()
         {
-            var contact = ApiSteps.contactSteps.GetAndReturnRandomContact();
+            var contact = ApiSteps.ContactSteps.GetAndReturnRandomContact();
             var pathedContact = JObject.FromObject(new { BillingCity = Faker.LocationFaker.City() }); ;
 
-            var response = ApiSteps.contactSteps.ChangeContact<ICollection<Error>>(contact.Id, pathedContact);
+            var response = ApiSteps.ContactSteps.ChangeContact(contact.Id, pathedContact);
 
-            response.Should().NotBeNull();
-
-            response.First().Should().BeEquivalentTo(MessageContainer.API.ErrorInvalidField("BillingCity", "Contact"));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeEquivalentTo(new Collection<Error>() { MessageContainer.API.ErrorInvalidField("BillingCity", "Contact") });
         }
         #endregion
 
@@ -188,13 +206,19 @@ namespace Tests.API
         [AllureSubSuite("Delete contact")]
         public void Delete_RandomContact_OK()
         {
-            var contact = ApiSteps.contactSteps.GetAndReturnRandomContact();
+            var contact = ApiSteps.ContactSteps.GetAndReturnRandomContact();
 
-            var response = ApiSteps.contactSteps.DeleteContact<string>(contact.Id);
-            response.Should().BeNull();
+            var response = ApiSteps.ContactSteps.DeleteContact(contact.Id);
 
-            var errors = ApiSteps.contactSteps.GetContactById<ICollection<Error>>(contact.Id);
-            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorEntityNotExist());
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeNull();
+
+            var getResponse = ApiSteps.ContactSteps.GetContactById(contact.Id);
+
+            getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound.ToString());
+            getResponse.Data.Should().BeNull();
+            getResponse.Errors.Should().BeEquivalentTo(new Collection<Error>() { MessageContainer.API.ErrorEntityNotExist() });
         }
 
         [Test]
@@ -205,9 +229,11 @@ namespace Tests.API
         public void Delete_NotExistingContact_NotFound()
         {
             var unknownContactId = "Unknown";
-            var errors = ApiSteps.contactSteps.DeleteContact<ICollection<Error>>(unknownContactId);
+            var response = ApiSteps.ContactSteps.DeleteContact(unknownContactId);
 
-            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorEntityNotFoundOrNotAccessible(unknownContactId));
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeEquivalentTo(new Collection<Error>() { MessageContainer.API.ErrorEntityNotFoundOrNotAccessible(unknownContactId) });
         }
         #endregion
     }

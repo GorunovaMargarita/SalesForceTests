@@ -5,6 +5,8 @@ using NUnit.Allure.Attributes;
 using FluentAssertions;
 using Core;
 using Newtonsoft.Json.Linq;
+using System.Net;
+using System.Collections.ObjectModel;
 
 namespace Tests.API
 {
@@ -21,13 +23,16 @@ namespace Tests.API
         public void Post_CreateAccount_OnlyRequiredAttributes_Created()
         {
             var accountForCreation = AccountBuilder.WithOnlyRequiredProperties();
-            var response = ApiSteps.accountSteps.CreateAccount<CreateResponse>(accountForCreation);
-            response.Success.Should().BeTrue();
-            response.Errors.Should().BeEmpty();
+            var response = ApiSteps.AccountSteps.CreateAccount(accountForCreation);
 
-            var createdAccount = ApiSteps.accountSteps.GetAccountById<Account>(response.Id);
+            response.StatusCode.Should().Be(HttpStatusCode.Created.ToString());
+            response.Errors.Should().BeNull();
+            response.Data.Success.Should().BeTrue();
+            response.Data.Id.Should().NotBeNull();
+
+            var createdAccount = ApiSteps.AccountSteps.GetAccountById(response.Data.Id).Data;
             createdAccount.Should().BeEquivalentTo(accountForCreation, options => options.Excluding(o => o.Id));
-            createdAccount.Id.Should().NotBeEmpty();
+            createdAccount.Id.Should().Be(response.Data.Id);
             Log.Instance.Logger.Info($"Account with Id: {createdAccount.Id} was created");
         }
 
@@ -39,14 +44,17 @@ namespace Tests.API
         public void Post_CreateAccount_WithBillingAddress_Created()
         {
             var accountForCreation = AccountBuilder.WithBillingAddress();
-            var response = ApiSteps.accountSteps.CreateAccount<CreateResponse>(accountForCreation);
-            response.Success.Should().BeTrue();
-            response.Errors.Should().BeEmpty();
+            var response = ApiSteps.AccountSteps.CreateAccount(accountForCreation);
 
-            var createdAccount = ApiSteps.accountSteps.GetAccountById<Account>(response.Id);
+            response.StatusCode.Should().Be(HttpStatusCode.Created.ToString());
+            response.Errors.Should().BeNull();
+            response.Data.Success.Should().BeTrue();
+            response.Data.Id.Should().NotBeNull();
+
+            var createdAccount = ApiSteps.AccountSteps.GetAccountById(response.Data.Id).Data;
             createdAccount.Should().BeEquivalentTo(accountForCreation, options => options.Excluding(o => o.Id)
                                                                                          .Excluding(o => o.BillingAddress));
-            createdAccount.Id.Should().NotBeEmpty();
+            createdAccount.Id.Should().Be(response.Data.Id);
 
             var billingAddressMustBe = new BillingAddress
             {
@@ -58,7 +66,6 @@ namespace Tests.API
             };
 
             createdAccount.BillingAddress.Should().BeEquivalentTo(billingAddressMustBe);
-
             Log.Instance.Logger.Info($"Account with Id: {createdAccount.Id} was created");
         }
 
@@ -69,10 +76,11 @@ namespace Tests.API
         [AllureSubSuite("Create accounts: negative")]
         public void Post_CreateAccount_RequiredPropertyEmpty_BadRequest()
         {
-            var accountForCreation = AccountBuilder.WithEmptyRequiredProperty();
-            var errors = ApiSteps.accountSteps.CreateAccount<ICollection<Error>>(accountForCreation);
+            var response = ApiSteps.AccountSteps.CreateAccount(AccountBuilder.WithEmptyRequiredProperty());
 
-            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorRequiredFieldMissing("Name"));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeEquivalentTo(new Collection<Error>() { MessageContainer.API.ErrorRequiredFieldMissing("Name") });
         }
 
         [Test]
@@ -82,10 +90,11 @@ namespace Tests.API
         [AllureSubSuite("Create accounts: negative")]
         public void Post_CreateAccount_RequiredPropertyMiss_BadRequest()
         {
-            var accountForCreation = AccountBuilder.WithoutRequiredProperty();
-            var errors = ApiSteps.accountSteps.CreateAccount<ICollection<Error>>(accountForCreation);
+            var response = ApiSteps.AccountSteps.CreateAccount(AccountBuilder.WithoutRequiredProperty());
 
-            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorRequiredFieldMissing("Name"));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeEquivalentTo(new Collection<Error>() { MessageContainer.API.ErrorRequiredFieldMissing("Name") });
         }
         #endregion
 
@@ -99,8 +108,11 @@ namespace Tests.API
         [AllureSubSuite("GET accounts")]
         public void Get_AllAccounts_OK()
         {
-            var accounts = ApiSteps.accountSteps.GetAllAccounts();
-            accounts.Should().Contain(x => x.AccountName.Equals(controlAccount.AccountName));
+            var response = ApiSteps.AccountSteps.GetAllAccounts();
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK.ToString());
+            response.Errors.Should().BeNull();
+            response.Data.Should().Contain(x => x.AccountName.Equals(controlAccount.AccountName));
             Log.Instance.Logger.Info($"Account collection contains account {controlAccount.AccountName}");
         }
 
@@ -109,11 +121,14 @@ namespace Tests.API
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
         [AllureSubSuite("GET accounts")]
-        public void Get_ById_OK()
+        public void Get_AccountById_OK()
         {
-            var account = ApiSteps.accountSteps.GetAccountById<Account>(controlAccount.Id);
-            account.Should().BeEquivalentTo(controlAccount);
-            Log.Instance.Logger.Info($"Getted default account:\r\n{account}");
+            var response = ApiSteps.AccountSteps.GetAccountById(controlAccount.Id);
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK.ToString());
+            response.Data.Should().BeEquivalentTo(controlAccount);
+            response.Errors.Should().BeNull();
+            Log.Instance.Logger.Info($"Getted default account:\r\n{response.Data}");
         }
 
         [Test]
@@ -121,12 +136,14 @@ namespace Tests.API
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
         [AllureSubSuite("GET accounts")]
-        public void Get_ById_UnknownAccount_OK()
+        public void Get_AccountById_UnknownAccount_OK()
         {
             var unknownAccountId = "Unknown";
-            var errors = ApiSteps.accountSteps.GetAccountById<ICollection<Error>>(unknownAccountId);
+            var response = ApiSteps.AccountSteps.GetAccountById(unknownAccountId);
 
-            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorEntityNotFoundOrNotAccessible(unknownAccountId));
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeEquivalentTo(new Collection<Error>() { MessageContainer.API.ErrorEntityNotFoundOrNotAccessible(unknownAccountId) });
         }
         #endregion
 
@@ -138,14 +155,16 @@ namespace Tests.API
         [AllureSubSuite("Change accounts: positive")]
         public void Patch_ChangeAccount_LastName_NoContent()
         {
-            var account = ApiSteps.accountSteps.GetAndReturnRandomAccount();
+            var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
             var pathedAccount = new Account() { AccountName = Faker.InternetFaker.Email() };
 
-            var response = ApiSteps.accountSteps.ChangeAccount<string>(account.Id, JObject.FromObject(pathedAccount));
+            var response = ApiSteps.AccountSteps.ChangeAccount(account.Id, JObject.FromObject(pathedAccount));
 
-            response.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeNull();
 
-            var resultAccount = ApiSteps.accountSteps.GetAccountById<Account>(account.Id);
+            var resultAccount = ApiSteps.AccountSteps.GetAccountById(account.Id).Data;
 
             account.AccountName = pathedAccount.AccountName;
             resultAccount.Should().BeEquivalentTo(account);
@@ -158,14 +177,16 @@ namespace Tests.API
         [AllureSubSuite("Change accounts: positive")]
         public void Patch_ChangeAccount_Phone_NoContent()
         {
-            var account = ApiSteps.accountSteps.GetAndReturnRandomAccount();
+            var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
             var pathedAccount = new Account() { Phone = Faker.PhoneFaker.Phone() };
 
-            var response = ApiSteps.accountSteps.ChangeAccount<string>(account.Id, JObject.FromObject(pathedAccount));
+            var response = ApiSteps.AccountSteps.ChangeAccount(account.Id, JObject.FromObject(pathedAccount));
 
-            response.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeNull();
 
-            var resultAccount = ApiSteps.accountSteps.GetAccountById<Account>(account.Id);
+            var resultAccount = ApiSteps.AccountSteps.GetAccountById(account.Id).Data;
 
             account.Phone = pathedAccount.Phone;
             resultAccount.Should().BeEquivalentTo(account);
@@ -178,14 +199,14 @@ namespace Tests.API
         [AllureSubSuite("Change accounts: negative")]
         public void Patch_ChangeAccount_InvalidField_BadRequest()
         {
-            var account = ApiSteps.accountSteps.GetAndReturnRandomAccount();
+            var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
             var pathedAccount = JObject.FromObject(new { LastName = Faker.NameFaker.LastName() }); ;
 
-            var response = ApiSteps.accountSteps.ChangeAccount<ICollection<Error>>(account.Id, pathedAccount);
+            var response = ApiSteps.AccountSteps.ChangeAccount(account.Id, pathedAccount);
 
-            response.Should().NotBeNull();
-
-            response.First().Should().BeEquivalentTo(MessageContainer.API.ErrorInvalidField("LastName", "Account"));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeEquivalentTo(new Collection<Error>() { MessageContainer.API.ErrorInvalidField("LastName", "Account") });
         }
         #endregion
 
@@ -197,13 +218,19 @@ namespace Tests.API
         [AllureSubSuite("Delete account")]
         public void Delete_RandomAccount_OK()
         {
-            var account = ApiSteps.accountSteps.GetAndReturnRandomAccount();
+            var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
 
-            var deleteResponse = ApiSteps.accountSteps.DeleteAccount<string>(account.Id);
-            deleteResponse.Should().BeNull();
+            var response = ApiSteps.AccountSteps.DeleteAccount(account.Id);
 
-            var errors = ApiSteps.accountSteps.GetAccountById<ICollection<Error>>(account.Id);
-            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorEntityNotExist());
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeNull();
+
+            var getResponse = ApiSteps.AccountSteps.GetAccountById(account.Id);
+
+            getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound.ToString());
+            getResponse.Data.Should().BeNull();
+            getResponse.Errors.Should().BeEquivalentTo(new Collection<Error>() { MessageContainer.API.ErrorEntityNotExist() });
         }
 
         [Test]
@@ -214,9 +241,11 @@ namespace Tests.API
         public void Delete_NotExistingAccount_NotFound()
         {
             var unknownAccountId = "Unknown";
-            var errors = ApiSteps.accountSteps.DeleteAccount<ICollection<Error>>(unknownAccountId);
+            var response = ApiSteps.AccountSteps.DeleteAccount(unknownAccountId);
 
-            errors.First().Should().BeEquivalentTo(MessageContainer.API.ErrorEntityNotFoundOrNotAccessible(unknownAccountId));
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound.ToString());
+            response.Data.Should().BeNull();
+            response.Errors.Should().BeEquivalentTo(new Collection<Error>() { MessageContainer.API.ErrorEntityNotFoundOrNotAccessible(unknownAccountId) });
         }
         #endregion
     }

@@ -13,8 +13,8 @@ namespace BusinessObject.SalesForce.UI.Steps
         /// <summary>
         /// Init account creation
         /// </summary>
-        /// <param name="user">System user</param>
-        /// <returns></returns>
+        /// <param name="user">SalesForce user</param>
+        /// <returns>NewContactModal page</returns>
         public NewContactModal InitContactCreation(User user = null)
         {
             user ??= UserBuilder.GetSalesForceUser();
@@ -29,8 +29,8 @@ namespace BusinessObject.SalesForce.UI.Steps
         /// <summary>
         /// Open contact page with contact list
         /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
+        /// <param name="user">SalesForce user</param>
+        /// <returns>ContactPage page</returns>
         public ContactPage OpenContactPage(User user = null)
         {
             user ??= UserBuilder.GetSalesForceUser();

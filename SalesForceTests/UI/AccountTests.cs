@@ -21,7 +21,7 @@ namespace Tests.UI
         {
             var account = AccountBuilder.WithOnlyRequiredProperties();
 
-            UiSteps.accountSteps.InitAccountCreation()
+            UiSteps.AccountSteps.InitAccountCreation()
                                 .FillNewAccountForm(account)
                                 .ConfirmAccountCreation()
                                 .CheckCreateSuccessMessage(account.AccountName)
@@ -38,7 +38,7 @@ namespace Tests.UI
         {
             Account account = AccountBuilder.GetAccountWithFullAccountInfoPart();
 
-            UiSteps.accountSteps.InitAccountCreation()
+            UiSteps.AccountSteps.InitAccountCreation()
                                 .FillNewAccountForm(account)
                                 .ConfirmAccountCreation()
                                 .CheckCreateSuccessMessage(account.AccountName)
@@ -55,13 +55,13 @@ namespace Tests.UI
         [AllureSubSuite("Change account")]
         public void ChangeAccount_AccountName_Ok()
         {
-            var accountName = ApiSteps.accountSteps.GetAndReturnRandomAccount().AccountName;
+            var accountName = ApiSteps.AccountSteps.GetAndReturnRandomAccount().AccountName;
             var patchedAccount = new Account() { AccountName = Faker.InternetFaker.Email() };
-            UiSteps.accountSteps.OpenAccountPage()
+            UiSteps.AccountSteps.OpenAccountPage()
                                 .InitAccountChange(accountName)
                                 .EditData(patchedAccount)
                                 .ConfirmAccountCreation();
-            ApiSteps.accountSteps.GetAllAccounts().Should().NotContain(x => x.AccountName.Equals(accountName));
+            ApiSteps.AccountSteps.GetAllAccounts().Data.Should().NotContain(x => x.AccountName.Equals(accountName));
         }
         #endregion
 
@@ -74,11 +74,11 @@ namespace Tests.UI
         public void DeleteAccount_Ok()
         {
             //var accountName = "laura99@hotmail.com";
-            var accountName = ApiSteps.accountSteps.GetAndReturnRandomAccount().AccountName;
-            UiSteps.accountSteps.OpenAccountPage()
+            var accountName = ApiSteps.AccountSteps.GetAndReturnRandomAccount().AccountName;
+            UiSteps.AccountSteps.OpenAccountPage()
                                 .DeleteAccount(accountName)
                                 .CheckDeleteSuccessMessage(accountName);
-            ApiSteps.accountSteps.GetAllAccounts().Should().NotContain(x => x.AccountName.Equals(accountName));
+            ApiSteps.AccountSteps.GetAllAccounts().Data.Should().NotContain(x => x.AccountName.Equals(accountName));
         }
         #endregion
     }
