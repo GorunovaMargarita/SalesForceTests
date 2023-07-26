@@ -10,6 +10,10 @@ pool:
   name: 'Margaritas'
 
 steps:
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 6.x'
+  inputs:
+    versionSpec: 6.x
 - task: NuGetCommand@2
   displayName: 'Restore nuget package'
   inputs:
@@ -21,7 +25,8 @@ steps:
     command: 'build'
     arguments: '--configuration Debug'
 
-- task: DotNetCoreCLI@2
+- task: VSTest@3
   displayName: 'Run test'
   inputs:
-    command: 'test'
+    runSettingsFile: 'Configs\appsettings.Debug.json'
+    overrideTestrunParameters: '-API.Token ${token}'
