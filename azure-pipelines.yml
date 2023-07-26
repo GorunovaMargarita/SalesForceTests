@@ -1,0 +1,27 @@
+# Universal Windows Platform
+# Build a Universal Windows Platform project using Visual Studio.
+# Add steps that test and distribute an app, save build artifacts, and more:
+# https://aka.ms/yaml
+
+trigger:
+- feature
+
+pool:
+  name: 'Margaritas'
+
+steps:
+- task: NuGetCommand@2
+  displayName: 'Restore nuget package'
+  inputs:
+    command: 'restore'
+    restoreSolution: '$(solution)'
+- task: DotNetCoreCLI@2
+  displayName: 'Build solution'
+  inputs:
+    command: 'build'
+    arguments: '--configuration Debug'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run test'
+  inputs:
+    command: 'test'
