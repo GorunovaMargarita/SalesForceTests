@@ -7,6 +7,7 @@ using System.Net;
 namespace Tests.UI
 {
     [Parallelizable(ParallelScope.Fixtures)]
+    [Category("UI")]
     [TestFixture]
     public class AccountTests : TestBaseUI
     {

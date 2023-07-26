@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 namespace Tests.API
 {
     [Parallelizable(ParallelScope.Fixtures)]
+    [Category("API")]
     [TestFixture]
     public class AccountTests : TestBaseAPI
     {
