@@ -29,9 +29,9 @@ steps:
     targetFiles: SalesForceTests/Configs/appsettings.Debug.json
 
 - task: VSBuild@1
-  displayName: 'Build solution **\*.sln'
+  displayName: 'Build solution'
   inputs:
-    solution: '$(Parameters.solution)'
+    solution: '**\*.sln'
     vsVersion: '17.0'
     configuration: '$(BuildConfiguration)'
 
