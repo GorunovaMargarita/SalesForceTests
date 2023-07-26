@@ -7,17 +7,17 @@ namespace Core.Elements
     public class BaseElement
     {
         protected IWebDriver WebDriver => Browser.Instance.Driver;
-        public IWebElement GetElement() => WebDriver.FindElement(locator);
-        protected By locator;
+        public IWebElement GetElement() => WebDriver.FindElement(Locator);
+        public By Locator { get; }
 
         public BaseElement(By locator)
         {
-            this.locator = locator;
+            Locator = locator;
         }
 
         public BaseElement(string xpath)
         {
-            locator = By.XPath(xpath);
+            Locator = By.XPath(xpath);
         }
 
         public object ClickElementViaJs()
@@ -26,7 +26,7 @@ namespace Core.Elements
         }
         public void ClickWithActions()
         {
-            WaitHelper.WaitElement(WebDriver, locator);
+            WaitHelper.WaitElement(WebDriver, Locator);
             new Actions(WebDriver)
                 .MoveToElement(GetElement())
                 .Click()

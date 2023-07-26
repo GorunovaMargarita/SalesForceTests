@@ -11,6 +11,7 @@ using System.Net;
 namespace Tests.API
 {
     [Parallelizable(ParallelScope.Fixtures)]
+    [Category("API")]
     [TestFixture]
     public class ContactTests : TestBaseAPI
     {

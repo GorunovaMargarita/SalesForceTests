@@ -1,17 +1,23 @@
 ﻿using BusinessObject.SalesForce.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BusinessObject.SalesForce
 {
     public class ContactBuilder
     {
-        public static Contact DefaultContact() => new Contact() { Id = "003Hr00002QoOs9IAF", AccountName = "Thompson", LastName = "Thompson" };
+        public static Contact DefaultContact() =>
+            new Contact()
+            {
+                Id = "003Hr00002QoOs9IAF",
+                AccountName = "Thompson",
+                LastName = "Thompson"
+            };
 
-        public static Contact WithOnlyRequiredProperties() => new Contact() { LastName = Faker.NameFaker.LastName() };
+        public static Contact WithOnlyRequiredProperties() =>
+            new Contact()
+            {
+                LastName = Faker.NameFaker.LastName()
+            };
 
         public static Contact WithFullName()
         {
@@ -20,18 +26,36 @@ namespace BusinessObject.SalesForce
             return contact;
         }
 
-        public static Contact WithoutRequiredProperty() => new Contact()
-        {
-            MailingCity = Faker.LocationFaker.City(),
-            FirstName = Faker.NameFaker.FirstName(),
-            Birthdate = Faker.DateTimeFaker.BirthDay().ToString("yyyy-MM-dd")
-        };
+        public static Contact WithoutRequiredProperty() =>
+            new Contact()
+            {
+                MailingCity = Faker.LocationFaker.City(),
+                FirstName = Faker.NameFaker.FirstName(),
+                Birthdate = Faker.DateTimeFaker.BirthDay().ToString("yyyy-MM-dd")
+            };
 
-        public static Contact WithBirtdateIncorrectFormat() => new Contact()
+        public static Contact WithBirtdateIncorrectFormat() =>
+            new Contact()
+            {
+                LastName = Faker.NameFaker.LastName(),
+                FirstName = Faker.NameFaker.FirstName(),
+                Birthdate = Faker.DateTimeFaker.BirthDay().ToString("dd.MM.yyyy")
+            };
+
+        public static Contact WithPhones()
         {
-            LastName = Faker.NameFaker.LastName(),
-            FirstName = Faker.NameFaker.FirstName(),
-            Birthdate = Faker.DateTimeFaker.BirthDay().ToString("dd.MM.yyyy")
-        };
+            var contact = WithOnlyRequiredProperties();
+            contact.Phone = Faker.PhoneFaker.Phone();
+            contact.OtherPhone = Faker.PhoneFaker.Phone();
+            contact.AssistPhone = Faker.PhoneFaker.Phone();
+            return contact;
+        }
+
+        public static Contact WithUniqueLastName()
+        {
+            var contact = WithOnlyRequiredProperties();
+            contact.LastName = Faker.NameFaker.LastName() + System.DateTime.Now.ToString();
+            return contact;
+        }
     }
 }

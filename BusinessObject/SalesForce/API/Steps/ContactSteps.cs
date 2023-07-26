@@ -2,6 +2,7 @@
 using NUnit.Allure.Attributes;
 using BusinessObject.SalesForce.Model;
 using BusinessObject.SalesForce.API.Services;
+using OpenQA.Selenium.DevTools.V112.DOM;
 
 namespace BusinessObject.SalesForce.API.Steps
 {
@@ -77,8 +78,19 @@ namespace BusinessObject.SalesForce.API.Steps
         {
             var allContactCollection = GetAllContacts().Data;
             allContactCollection?.Remove(allContactCollection.First(a => a.Id.Equals(ContactBuilder.DefaultContact().Id)));
-            var randomContact = allContactCollection?.FirstOrDefault();
+            var randomContact = allContactCollection.ElementAt(new Random().Next(allContactCollection.Count - 1));
             return GetContactById(randomContact.Id).Data;
+        }
+
+        /// <summary>
+        /// Create and get new contact
+        /// </summary>
+        /// <param name="contact">Contact model</param>
+        /// <returns>Contact</returns>
+        public Contact CreateAndGetContact(Contact contact)
+        {
+            var newContactId = CreateContact(contact).Data.Id;
+            return GetContactById(newContactId).Data;
         }
     }
 }

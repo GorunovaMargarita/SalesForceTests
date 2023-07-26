@@ -53,6 +53,18 @@ namespace Core.Helpers
         }
 
         /// <summary>
+        /// Wait element count more then
+        /// </summary>
+        /// <param name="driver">WebDriver</param>
+        /// <param name="by">Locator</param>
+        /// <param name="count">Count of elements must be more then this value</param>
+        /// <param name="time">Time in seconds</param>
+        public static void WaitElementsCountMoreThen(IWebDriver driver, By by, int count, int time = 10)
+        {
+            new WebDriverWait(driver, TimeSpan.FromSeconds(time)).Until(element => element.FindElements(by).Count > count);
+        }
+
+        /// <summary>
         /// Wait page loaded
         /// </summary>
         /// <param name="driver">WebDriver</param>

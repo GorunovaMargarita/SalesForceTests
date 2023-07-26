@@ -8,7 +8,7 @@ namespace Core.Elements
         string optionTemplate = "//li//*[@title='{0}']";
         string optionByPartTemplate = "//li//*[contains(@title,'{0}')]";
 
-        private By ClearSectionCross = By.CssSelector("button[title='Clear Selection']");
+        private Button ClearSectionCross = new(By.XPath("//span[text()='Clear Selection']"));
 
         public PartialTextDropDown(By locator) : base(locator)
         {
@@ -38,14 +38,14 @@ namespace Core.Elements
 
         public void BaseSelect(string option, By by)
         {
-            WebDriver.FindElement(locator).Click();
-            WebDriver.FindElement(locator).SendKeys(option);
+            WebDriver.FindElement(Locator).Click();
+            WebDriver.FindElement(Locator).SendKeys(option);
             WebDriver.FindElement(by).Click();
         }
 
         public void Clear()
         {
-            new BaseElement(ClearSectionCross).ClickElementViaJs();
+            ClearSectionCross.ClickElementViaJs();
         }
     }
 }

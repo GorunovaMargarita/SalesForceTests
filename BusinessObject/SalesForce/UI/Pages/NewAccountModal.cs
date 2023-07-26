@@ -1,54 +1,58 @@
 ﻿using BusinessObject.SalesForce.Model;
 using Core;
 using Core.Elements;
+using Core.Helpers;
 using NUnit.Allure.Attributes;
+using OpenQA.Selenium;
 
 namespace BusinessObject.SalesForce.UI.Pages
 {
-    public class NewAccountModal
+    public class NewAccountModal : ActionsWithEntity
     {
         Input accountNameInput = new("Account Name");
-        PartialTextDropDown parentAccountDropDown = new("Parent Account");
         Input accountNumberInput = new("Account Number");
-        Input accountSite = new("Account Site");
-        DropDown typeDropDown = new("Type");
-        DropDown industryDropDown = new("Industry");
+        Input accountSiteInput = new("Account Site");
         Input annualRevenueInput = new("Annual Revenue");
-        DropDown ratingDropDown = new("Rating");
         Input phoneInput = new("Phone");
         Input faxInput = new("Fax");
         Input websiteInput = new("Website");
         Input tickerSymbolInput = new("Ticker Symbol");
-        DropDown ownershipDropDown = new("Ownership");
         Input employeesInput = new("Employees");
         Input sicCodeInput = new("SIC Code");
-        Input billingStreetInput = new("Billing Street");
+        Input billingStreetInput = new(By.XPath("//label[text()='Billing Street']/following-sibling::div/textarea"));
         Input billingCityInput = new("Billing City");
         Input billingStateProvinceInput = new("Billing State/Province");
         Input billingCountryInput = new("Billing Country");
-        Input shippingStreetInput = new("Shipping Street");
+        Input shippingStreetInput = new(By.XPath("//label[text()='Shipping Street']/following-sibling::div/textarea"));
         Input shippingCityInput = new("Shipping City");
         Input shippingZipPostalCodeInput = new("Shipping Zip/Postal Code");
         Input shippingStateProvinceInput = new("Shipping State/Province");
         Input shippingCountryInput = new("Shipping Country");
-        DropDown customerPriorityDropDown = new("Customer Priority");
         Input slaExpirationDateInput = new("SLA Expiration Date");
         Input numberOfLocationsInput = new("Number of Locations");
+        Input slaSerialNumberInput = new("SLA Serial Number");
+        Input descriptionInput = new(By.XPath("//label[text()='Description']/following-sibling::div/textarea"));
+
+        DropDown typeDropDown = new("Type");
+        DropDown industryDropDown = new("Industry");
+        DropDown ratingDropDown = new("Rating");
+        DropDown ownershipDropDown = new("Ownership");
+        DropDown customerPriorityDropDown = new("Customer Priority");
         DropDown activeDropDown = new("Active");
         DropDown slaDropDown = new("SLA");
-        Input slaSerialNumberInput = new("SLA Serial Number");
-        Input upsellOpportunityInput = new("Upsell Opportunity");
-        Input descriptionInput = new("Description");
+        DropDown upsellOpportunityDropDown = new("Upsell Opportunity");
 
         Button saveButton = new("SaveEdit");
         Button saveAndNewButton = new("SaveAndNew");
-        Button CancelButton = new("Cancel");
+        Button cancelButton = new("Cancel");
+
+        PartialTextDropDown parentAccountDropDown = new("Parent Account");
 
         /// <summary>
         /// Fill new account form
         /// </summary>
         /// <param name="account">Account entity</param>
-        /// <returns></returns>
+        /// <returns>NewAccountModal page</returns>
         [AllureStep]
         public NewAccountModal FillNewAccountForm(Account account)
         {
@@ -57,7 +61,7 @@ namespace BusinessObject.SalesForce.UI.Pages
             accountNameInput.EnterText(account.AccountName);
             parentAccountDropDown.Select(account.ParentAccount);
             accountNumberInput.EnterText(account.AccountNumber);
-            accountSite.EnterText(account.AccountSite);
+            accountSiteInput.EnterText(account.AccountSite);
             typeDropDown.Select(account.Type);
             industryDropDown.Select(account.Industry);
             annualRevenueInput.EnterText(account.AnnualRevenue);
@@ -84,7 +88,7 @@ namespace BusinessObject.SalesForce.UI.Pages
             activeDropDown.Select(account.Active);
             slaDropDown.Select(account.SLA);
             slaSerialNumberInput.EnterText(account.SLASerialNumber);
-            upsellOpportunityInput.EnterText(account.UpsellOpportunity);
+            upsellOpportunityDropDown.Select(account.UpsellOpportunity);
             descriptionInput.EnterText(account.Description);
 
             return this;
@@ -94,88 +98,61 @@ namespace BusinessObject.SalesForce.UI.Pages
         /// Change account data on edit form
         /// </summary>
         /// <param name="account">Account entity. Set only changable property values</param>
-        /// <returns></returns>
+        /// <returns>NewAccountModal page</returns>
         [AllureStep]
         public NewAccountModal EditData(Account account)
         {
-            if (!account.AccountName.Equals(accountNameInput.GetElement().Text) && !(account.AccountName == null))
-            {
-                accountNameInput.GetElement().Clear();
-                accountNameInput.EnterText(account.AccountName);
-            }
-            if (!account.AccountName.Equals(accountNumberInput.GetElement().Text) && !(account.AccountNumber == null))
-            {
-                accountNumberInput.GetElement().Clear();
-                accountNumberInput.EnterText(account.AccountNumber);
-            }
-            if (!account.AccountSite.Equals(accountSite.GetElement().Text) && !(account.AccountSite == null))
-            {
-                accountSite.GetElement().Clear();
-                accountSite.EnterText(account.AccountSite);
-            }
-            if (!account.Type.Equals(typeDropDown.GetElement().Text) && !(account.Type == null))
-            {
-                typeDropDown.GetElement().Clear();
-                typeDropDown.Select(account.Type);
-            }
-            if (!account.Industry.Equals(industryDropDown.GetElement().Text) && !(account.Industry == null))
-            {
-                industryDropDown.GetElement().Clear();
-                industryDropDown.Select(account.Industry);
-            }
-            if (!account.Phone.Equals(phoneInput.GetElement().Text) && !(account.Phone == null))
-            {
-                phoneInput.GetElement().Clear();
-                phoneInput.EnterText(account.Phone);
-            }
-            if (!account.Fax.Equals(faxInput.GetElement().Text) && !(account.Fax == null))
-            {
-                faxInput.GetElement().Clear();
-                faxInput.EnterText(account.Fax);
-            }
-            if (!account.Website.Equals(websiteInput.GetElement().Text) && !(account.Website == null))
-            {
-                websiteInput.GetElement().Clear();
-                websiteInput.EnterText(account.Website);
-            }
-            /*
-            parentAccountDropDown.Select(account.ParentAccount);
-            annualRevenueInput.EnterText(account.AnnualRevenue);
-            ratingDropDown.Select(account.Rating);
-            tickerSymbolInput.EnterText(account.TickerSymbol);
-            ownershipDropDown.Select(account.Ownership);
-            employeesInput.EnterText(account.Employees);
-            sicCodeInput.EnterText(account.SICCode);
-            billingStreetInput.EnterText(account.BillingStreet);
-            billingCityInput.EnterText(account.BillingCity);
-            billingStateProvinceInput.EnterText(account.BillingStateProvince);
-            billingCountryInput.EnterText(account.BillingCountry);
-            shippingStreetInput.EnterText(account.ShippingStreet);
-            shippingCityInput.EnterText(account.ShippingCity);
-            shippingZipPostalCodeInput.EnterText(account.ShippingZipPostalCode);
-            shippingStateProvinceInput.EnterText(account.ShippingStateProvince);
-            shippingCountryInput.EnterText(account.ShippingCountry);
-            customerPriorityDropDown.Select(account.CustomerPriority);
-            slaExpirationDateInput.EnterText(account.SLAExpirationDate);
-            numberOfLocationsInput.EnterText(account.NumberOfLocations);
-            activeDropDown.Select(account.Active);
-            slaDropDown.Select(account.SLA);
-            slaSerialNumberInput.EnterText(account.SLASerialNumber);
-            upsellOpportunityInput.EnterText(account.UpsellOpportunity);
-            descriptionInput.EnterText(account.Description);*/
+            ChangeTextValue(account, "AccountName", accountNameInput);
+            ChangeTextValue(account, "AccountNumber", accountNumberInput);
+            ChangeTextValue(account, "AccountSite", accountSiteInput);
+            ChangeTextValue(account, "Phone", phoneInput);
+            ChangeTextValue(account, "Fax", faxInput);
+            ChangeTextValue(account, "Website", websiteInput);
+            ChangeTextValue(account, "AnnualRevenue", annualRevenueInput);
+            ChangeTextValue(account, "TickerSymbol", tickerSymbolInput);
+            ChangeTextValue(account, "Employees", employeesInput);
+            ChangeTextValue(account, "SICCode", sicCodeInput);
+            ChangeTextValue(account, "BillingStreet", billingStreetInput);
+            ChangeTextValue(account, "BillingCity", billingCityInput);
+            ChangeTextValue(account, "BillingStateProvince", billingStateProvinceInput);
+            ChangeTextValue(account, "BillingCountry", billingCountryInput);
+            ChangeTextValue(account, "ShippingStreet", shippingStreetInput);
+            ChangeTextValue(account, "ShippingCity", shippingCityInput);
+            ChangeTextValue(account, "ShippingZipPostalCode", shippingZipPostalCodeInput);
+            ChangeTextValue(account, "ShippingStateProvince", shippingStateProvinceInput);
+            ChangeTextValue(account, "ShippingCountry", shippingCountryInput);
+            ChangeTextValue(account, "SLAExpirationDate", slaExpirationDateInput);
+            ChangeTextValue(account, "NumberOfLocations", numberOfLocationsInput);
+            ChangeTextValue(account, "SLASerialNumber", slaSerialNumberInput);
+            ChangeTextValue(account, "Description", descriptionInput);
+
+            ChangeDropDown(account, "Type", typeDropDown);
+            ChangePartDropDown(account, "ParentAccount", parentAccountDropDown);
+            ChangeDropDown(account, "Rating", ratingDropDown);
+            ChangeDropDown(account, "Ownership", ownershipDropDown);
+            ChangeDropDown(account, "CustomerPriority", customerPriorityDropDown);
+            ChangeDropDown(account, "Active", activeDropDown);
+            ChangeDropDown(account, "SLA", slaDropDown);
+            ChangeDropDown(account, "UpsellOpportunity", upsellOpportunityDropDown);
 
             return this;
         }
 
+        /// <summary>
+        /// Confirm account creation or edit
+        /// </summary>
+        /// <returns>AccountPage</returns>
         [AllureStep]
-        public AccountPage ConfirmAccountCreation()
+        public AccountPage ConfirmAccountCreateOrEdit()
         {
             saveButton.GetElement().Click();
-            //uncomment if we have a problem with pop up
-            //WaitHelper.WaitElement(Browser.Instance.Driver, By.CssSelector("span[title=Follow]"));
             return new AccountPage();
         }
 
+        /// <summary>
+        /// Confirm account creation and init new account creation
+        /// </summary>
+        /// <returns>NewAccountModal page</returns>
         [AllureStep]
         public NewAccountModal ConfirmAndNewAccountCreation()
         {
@@ -183,10 +160,15 @@ namespace BusinessObject.SalesForce.UI.Pages
             return this;
         }
 
+        /// <summary>
+        /// Cancel account creation
+        /// </summary>
+        /// <returns>AccountPage</returns>
         [AllureStep]
-        public void CancelAccountCreation()
+        public AccountPage CancelAccountCreation()
         {
-            CancelButton.GetElement().Click();
+            cancelButton.GetElement().Click();
+            return new AccountPage();
         }
     }
 }

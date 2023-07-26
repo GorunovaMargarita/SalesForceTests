@@ -7,46 +7,53 @@ using BusinessObject.SalesForce.Model;
 
 namespace BusinessObject.SalesForce.UI.Pages
 {
-    public class NewContactModal
+    public class NewContactModal : ActionsWithEntity
     {
-        DropDown salutationDropDown = new("Salutation");
         Input firstNameInput = new("First Name");
         Input lastNameInput = new("Last Name");
-        Input accountNameInput = new("Account Name");
+        //Input accountNameInput = new("Account Name");
+        Input accountNameInput = new(By.XPath("//label[text()='Account Name']/following-sibling::div//input"));
         Input titleInput = new("Title");
         Input departmentInput = new("Department");
         Input birthdateInput = new("Birthdate");
-        PartialTextDropDown reportsToDropDown = new("Reports To");
-        PartialTextDropDown leadSourceDropDown = new("Lead Source");
         Input homePhoneInput = new("Home Phone");
+        Input phoneInput = new("Phone");
         Input mobileInput = new("Mobile");
         Input otherPhoneInput = new("Other Phone");
         Input faxInput = new("Fax");
         Input emailInput = new("Email");
         Input assistantInput = new("Assistant");
         Input assistantPhoneInput = new("Asst. Phone");
-        Input mailingStreetInput = new("Mailing Street");
+        //Input mailingStreetInput = new("Mailing Street");
+        Input mailingStreetInput = new(By.XPath("//label[text()='Mailing Street']/following-sibling::div/textarea"));
         Input mailingCityInput = new("Mailing City");
         Input mailingStateProvinceInput = new("Mailing State/Province");
         Input mailingCountryInput = new("Mailing Country");
-        Input otherStreetInput = new("Other Street");
+        //Input otherStreetInput = new("Other Street");
+        Input otherStreetInput = new(By.XPath("//label[text()='Other Street']/following-sibling::div/textarea"));
         Input otherCityInput = new("Other City");
         Input otherZipPostalCodeInput = new("Other Zip/Postal Code");
         Input otherStateProvinceInput = new("Other State/Province");
         Input otherCountryInput = new("Other Country");
         Input languagesInput = new("Languages");
+        Input descriptionInput = new(By.XPath("//label[text()='Description']/following-sibling::div/textarea"));
+
+        DropDown salutationDropDown = new("Salutation");
         DropDown levelDropDown = new("Level");
-        Input descriptionInput = new("Description");
+        DropDown leadSourceDropDown = new(By.XPath("//label[text()='Lead Source']/following-sibling::div//span"));
 
         Button saveButton = new("SaveEdit");
         Button saveAndNewButton = new("SaveAndNew");
         Button CancelButton = new("CancelEdit");
 
+        PartialTextDropDown reportsToDropDown = new("Reports To");
+
+
         /// <summary>
         /// Fill new contact form
         /// </summary>
         /// <param name="contact">Contact entity</param>
-        /// <returns></returns>
+        /// <returns>NewContactModal page</returns>
         [AllureStep]
         public NewContactModal FillNewContactForm(Contact contact)
         {
@@ -60,8 +67,9 @@ namespace BusinessObject.SalesForce.UI.Pages
             departmentInput.EnterText(contact.Departament);
             birthdateInput.EnterText(contact.Birthdate);
             reportsToDropDown.SelectByPartText(contact.ReportsTo);
-            leadSourceDropDown.SelectByPartText(contact.LeadSource);
+            leadSourceDropDown.Select(contact.LeadSource);
             homePhoneInput.EnterText(contact.HomePhone);
+            phoneInput.EnterText(contact.Phone);
             mobileInput.EnterText(contact.Mobile);
             otherPhoneInput.EnterText(contact.OtherPhone);
             faxInput.EnterText(contact.Fax);
@@ -85,103 +93,77 @@ namespace BusinessObject.SalesForce.UI.Pages
         }
 
         /// <summary>
-        /// Change contact data
+        /// Change account data on edit form
         /// </summary>
-        /// <param name="contact">Contact entity. Set only changable property values</param>
-        /// <returns></returns>
+        /// <param name="contact">Account entity. Set only changable property values</param>
+        /// <returns>NewAccountModal page</returns>
         [AllureStep]
         public NewContactModal EditData(Contact contact)
         {
-            if (!contact.AccountName.Equals(accountNameInput.GetElement().Text) && !(contact.AccountName == null))
-            {
-                accountNameInput.GetElement().Clear();
-                accountNameInput.EnterText(contact.AccountName);
-            }
-            if (!contact.FirstName.Equals(firstNameInput.GetElement().Text) && !(contact.FirstName == null))
-            {
-                firstNameInput.GetElement().Clear();
-                firstNameInput.EnterText(contact.FirstName);
-            }
-            if (!contact.LastName.Equals(lastNameInput.GetElement().Text) && !(contact.LastName == null))
-            {
-                lastNameInput.GetElement().Clear();
-                lastNameInput.EnterText(contact.LastName);
-            }
-            if (!contact.Title.Equals(titleInput.GetElement().Text) && !(contact.Title == null))
-            {
-                titleInput.GetElement().Clear();
-                titleInput.EnterText(contact.Title);
-            }
-            if (!contact.Salutation.Equals(salutationDropDown.GetElement().Text) && !(contact.Salutation == null))
-            {
-                salutationDropDown.GetElement().Clear();
-                salutationDropDown.Select(contact.Salutation);
-            }
-            if (!contact.HomePhone.Equals(homePhoneInput.GetElement().Text) && !(contact.HomePhone == null))
-            {
-                homePhoneInput.GetElement().Clear();
-                homePhoneInput.EnterText(contact.HomePhone);
-            }
-            if (!contact.Mobile.Equals(mobileInput.GetElement().Text) && !(contact.Mobile == null))
-            {
-                mobileInput.GetElement().Clear();
-                mobileInput.EnterText(contact.Mobile);
-            }
-            if (!contact.OtherPhone.Equals(otherPhoneInput.GetElement().Text) && !(contact.OtherPhone == null))
-            {
-                otherPhoneInput.GetElement().Clear();
-                otherPhoneInput.EnterText(contact.OtherPhone);
-            }
-            if (!contact.Fax.Equals(faxInput.GetElement().Text) && !(contact.Fax == null))
-            {
-                faxInput.GetElement().Clear();
-                faxInput.EnterText(contact.Fax);
-            }
-            if (!contact.Email.Equals(emailInput.GetElement().Text) && !(contact.Email == null))
-            {
-                emailInput.GetElement().Clear();
-                emailInput.EnterText(contact.Email);
-            }
-            /*
-            departmentInput.EnterText(contact.Departament);
-            birthdateInput.EnterText(contact.Birthdate);
-            reportsToDropDown.SelectByPartText(contact.ReportsTo);
-            leadSourceDropDown.SelectByPartText(contact.LeadSource);
-            assistantInput.EnterText(contact.Assistant);
-            assistantPhoneInput.EnterText(contact.AssistPhone);
-            mailingStreetInput.EnterText(contact.MailingStreet);
-            mailingCityInput.EnterText(contact.MailingCity);
-            mailingStateProvinceInput.EnterText(contact.MailingStateProvince);
-            mailingCountryInput.EnterText(contact.MailingCountry);
-            otherStreetInput.EnterText(contact.OtherStreet);
-            otherCityInput.EnterText(contact.OtherCity);
-            otherZipPostalCodeInput.EnterText(contact.OtherZipPostalCode);
-            otherStateProvinceInput.EnterText(contact.OtherStateProvince);
-            otherCountryInput.EnterText(contact.OtherCountry);
-            languagesInput.EnterText(contact.Languages);
-            levelDropDown.Select(contact.Level);
-            descriptionInput.EnterText(contact.Description);*/
+            ChangeTextValue(contact, "AccountName", accountNameInput);
+            ChangeTextValue(contact, "FirstName", firstNameInput);
+            ChangeTextValue(contact, "LastName", lastNameInput);
+            ChangeTextValue(contact, "Input", titleInput);
+            ChangeTextValue(contact, "Fax", faxInput);
+            ChangeTextValue(contact, "Departament", departmentInput);
+            ChangeTextValue(contact, "Birthdate", birthdateInput);
+            ChangeTextValue(contact, "HomePhone", homePhoneInput);
+            ChangeTextValue(contact, "Mobile", mobileInput);
+            ChangeTextValue(contact, "OtherPhone", otherPhoneInput);
+            ChangeTextValue(contact, "Phone", phoneInput);
+            ChangeTextValue(contact, "Email", emailInput);
+            ChangeTextValue(contact, "Assistant", assistantInput);
+            ChangeTextValue(contact, "AssistPhone", assistantPhoneInput);
+            ChangeTextValue(contact, "MailingStreet", mailingStreetInput);
+            ChangeTextValue(contact, "MailingCity", mailingCityInput);
+            ChangeTextValue(contact, "MailingStateProvince", mailingStateProvinceInput);
+            ChangeTextValue(contact, "MailingCountry", mailingCountryInput);
+            ChangeTextValue(contact, "OtherStreet", otherStreetInput);
+            ChangeTextValue(contact, "OtherCity", otherCityInput);
+            ChangeTextValue(contact, "OtherZipPostalCode", otherZipPostalCodeInput);
+            ChangeTextValue(contact, "OtherStateProvince", otherStateProvinceInput);
+            ChangeTextValue(contact, "OtherCountry", otherCountryInput);
+            ChangeTextValue(contact, "Languages", languagesInput);
+            ChangeTextValue(contact, "Description", descriptionInput);
+
+            ChangeDropDown(contact, "Salutation", salutationDropDown);
+            ChangeDropDown(contact, "Level", levelDropDown);
+
+            ChangePartDropDown(contact, "ReportsTo", reportsToDropDown);
+            ChangeDropDown(contact, "LeadSource", leadSourceDropDown);
 
             return this;
         }
 
+        /// <summary>
+        /// Confirm contact creation 
+        /// </summary>
+        /// <returns>ContactPage</returns>
         [AllureStep]
-        public ContactPage ConfirmContactCreation()
+        public ContactPage ConfirmContactCreateOrEdit()
         {
             saveButton.GetElement().Click();
-            WaitHelper.WaitElement(Browser.Instance.Driver, By.CssSelector("span[title=Follow]"));
+            //WaitHelper.WaitElement(driver, By.CssSelector("span[title=Follow]"));
             return new ContactPage();
         }
 
+        /// <summary>
+        /// Confirm contact creation and init new contact creation
+        /// </summary>
+        /// <returns>NewContactModal page</returns>
         [AllureStep]
-        public NewContactModal ConfirmAndNewContractCreation()
+        public NewContactModal ConfirmAndNewContactCreation()
         {
             saveAndNewButton.GetElement().Click();
             return this;
         }
 
+        /// <summary>
+        /// Cancel contact creation
+        /// </summary>
+        /// <returns>ContactPage</returns>
         [AllureStep]
-        public ContactPage CancelContractCreation()
+        public ContactPage CancelContactCreation()
         {
             CancelButton.GetElement().Click();
             return new ContactPage();
