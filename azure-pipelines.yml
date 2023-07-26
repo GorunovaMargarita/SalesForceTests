@@ -19,7 +19,7 @@ steps:
   displayName: 'Restore nuget package'
   inputs:
     command: 'restore'
-    restoreSolution: '$(solution)'
+    restoreSolution: '**\*.sln'
 
 - task: FileTransform@1
   displayName: 'File Transform'
