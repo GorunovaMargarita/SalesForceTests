@@ -14,16 +14,13 @@ steps:
   displayName: 'Use NuGet 6.x'
   inputs:
     versionSpec: 6.x
+    
 - task: NuGetCommand@2
   displayName: 'Restore nuget package'
   inputs:
     command: 'restore'
     restoreSolution: '$(solution)'
-- task: DotNetCoreCLI@2
-  displayName: 'Build solution'
-  inputs:
-    command: 'build'
-    arguments: '--configuration Debug'
+
 - task: FileTransform@1
   displayName: 'File Transform'
   inputs:
