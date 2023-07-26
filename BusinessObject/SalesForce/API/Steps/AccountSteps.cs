@@ -78,7 +78,7 @@ namespace BusinessObject.SalesForce.API.Steps
         {
             var allAccountCollection = GetAllAccounts().Data;
             allAccountCollection?.Remove(allAccountCollection.First(a => a.Id.Equals(AccountBuilder.DefaultAcccount().Id)));
-            var randomAccount = allAccountCollection?.FirstOrDefault();
+            var randomAccount = allAccountCollection.ElementAt(new Random().Next(allAccountCollection.Count - 1));
             return GetAccountById(randomAccount.Id).Data;
         }
     }

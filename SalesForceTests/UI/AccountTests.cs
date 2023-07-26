@@ -2,7 +2,7 @@
 using BusinessObject.SalesForce.Model;
 using FluentAssertions;
 using NUnit.Allure.Attributes;
-
+using System.Net;
 
 namespace Tests.UI
 {
@@ -23,7 +23,7 @@ namespace Tests.UI
 
             UiSteps.AccountSteps.InitAccountCreation()
                                 .FillNewAccountForm(account)
-                                .ConfirmAccountCreation()
+                                .ConfirmAccountCreateOrEdit()
                                 .CheckCreateSuccessMessage(account.AccountName)
                                 .ReloadAccounts()
                                 .CheckAccountWithAttExist(account.AccountName);
@@ -40,7 +40,7 @@ namespace Tests.UI
 
             UiSteps.AccountSteps.InitAccountCreation()
                                 .FillNewAccountForm(account)
-                                .ConfirmAccountCreation()
+                                .ConfirmAccountCreateOrEdit()
                                 .CheckCreateSuccessMessage(account.AccountName)
                                 .ReloadAccounts()
                                 .CheckAccountWithAttExist(account.AccountName);
@@ -55,13 +55,55 @@ namespace Tests.UI
         [AllureSubSuite("Change account")]
         public void ChangeAccount_AccountName_Ok()
         {
-            var accountName = ApiSteps.AccountSteps.GetAndReturnRandomAccount().AccountName;
+            var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
             var patchedAccount = new Account() { AccountName = Faker.InternetFaker.Email() };
             UiSteps.AccountSteps.OpenAccountPage()
-                                .InitAccountChange(accountName)
+                                .InitAccountChange(account.AccountName)
                                 .EditData(patchedAccount)
-                                .ConfirmAccountCreation();
-            ApiSteps.AccountSteps.GetAllAccounts().Data.Should().NotContain(x => x.AccountName.Equals(accountName));
+                                .ConfirmAccountCreateOrEdit();
+            //need time to save changes or clear cache
+            Thread.Sleep(1000);
+            ApiSteps.AccountSteps.GetAccountById(account.Id).Data.AccountName.Should().Be(patchedAccount.AccountName);
+        }
+
+        [Test]
+        [AllureTag("Smoke")]
+        [AllureOwner("Margarita")]
+        [AllureSuite("UI Tests")]
+        [AllureSubSuite("Change account")]
+        public void ChangeAccount_Type_Ok()
+        {
+            var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
+            string newType = "Technology Partner";
+
+            UiSteps.AccountSteps.OpenAccountPage()
+                                .InitAccountChange(account.AccountName)
+                                .EditData(new Account() { Type = newType })
+                                .ConfirmAccountCreateOrEdit();
+            //need time to save changes or clear cache
+            Thread.Sleep(1000);
+            ApiSteps.AccountSteps.GetAccountById(account.Id).Data.Type.Should().Be(newType);
+        }
+
+        [Test]
+        [AllureTag("Smoke")]
+        [AllureOwner("Margarita")]
+        [AllureSuite("UI Tests")]
+        [AllureSubSuite("Change account")]
+        public void ChangeAccount_ParentAccount_Ok()
+        {
+            var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
+            var newParentAccount = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
+            if(account.ParentAccount == newParentAccount.AccountName)
+                newParentAccount = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
+            var patchedAccount = new Account() { ParentAccount = newParentAccount.AccountName };
+            UiSteps.AccountSteps.OpenAccountPage()
+                                .InitAccountChange(account.AccountName)
+                                .EditData(patchedAccount)
+                                .ConfirmAccountCreateOrEdit();
+            //need time to save changes or clear cache
+            Thread.Sleep(1000);
+            ApiSteps.AccountSteps.GetAccountById(account.Id).Data.ParentAccount.Should().Be(newParentAccount.Id);
         }
         #endregion
 
@@ -74,11 +116,11 @@ namespace Tests.UI
         public void DeleteAccount_Ok()
         {
             //var accountName = "laura99@hotmail.com";
-            var accountName = ApiSteps.AccountSteps.GetAndReturnRandomAccount().AccountName;
+            var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
             UiSteps.AccountSteps.OpenAccountPage()
-                                .DeleteAccount(accountName)
-                                .CheckDeleteSuccessMessage(accountName);
-            ApiSteps.AccountSteps.GetAllAccounts().Data.Should().NotContain(x => x.AccountName.Equals(accountName));
+                                .DeleteAccount(account.AccountName)
+                                .CheckDeleteSuccessMessage(account.AccountName);
+            ApiSteps.AccountSteps.GetAccountById(account.Id).StatusCode.Should().Be(HttpStatusCode.NotFound.ToString());
         }
         #endregion
     }

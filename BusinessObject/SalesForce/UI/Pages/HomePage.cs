@@ -3,11 +3,6 @@ using Core.Configuration;
 using Core.Elements;
 using NUnit.Allure.Attributes;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessObject.SalesForce.UI.Pages
 {
@@ -17,13 +12,22 @@ namespace BusinessObject.SalesForce.UI.Pages
 
         private Button accountButton = new(By.XPath("//a[@title='Accounts']//span"));
         private Button contactButton = new(By.XPath("//a[@title='Contacts']//span"));
-        public override HomePage Open()
+
+        /// <summary>
+        /// Open home page by ling
+        /// </summary>
+        /// <returns>HomePage</returns>
+        public HomePage Open()
         {
             Log.Instance.Logger.Info($"Navigate to url: {Url}");
             Browser.Instance.NavigateToUrl(Url);
             return this;
         }
 
+        /// <summary>
+        /// Open account page
+        /// </summary>
+        /// <returns>AccountPage</returns>
         [AllureStep]
         public AccountPage GoToAccountPage()
         {
@@ -31,6 +35,10 @@ namespace BusinessObject.SalesForce.UI.Pages
             return new AccountPage();
         }
 
+        /// <summary>
+        /// Open contact page 
+        /// </summary>
+        /// <returns>ContactPage</returns>
         [AllureStep]
         public ContactPage GoToContactPage()
         {
