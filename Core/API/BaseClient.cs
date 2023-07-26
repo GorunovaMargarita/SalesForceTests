@@ -46,13 +46,13 @@ namespace Core.API
 
         public string RequestToLog(RestRequest request)
         {
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             Log.Instance.Logger.Info("Request parameters: \r\n");
             foreach (var param in request.Parameters)
             {
-                sb.AppendFormat("{0}: {1}\r\n", param.Name, param.Value);
+                stringBuilder.AppendFormat("{0}: {1}\r\n", param.Name, param.Value);
             }
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
     }
 }

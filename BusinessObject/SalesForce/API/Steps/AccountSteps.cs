@@ -1,80 +1,85 @@
 ﻿using BusinessObject.SalesForce.API.Services;
 using BusinessObject.SalesForce.Model;
-using FluentAssertions;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Allure.Attributes;
-using NUnit.Framework;
-using System.Net;
+
 
 
 namespace BusinessObject.SalesForce.API.Steps
 {
     public class AccountSteps : AccountService
     {
+        /// <summary>
+        /// Get all accounts
+        /// </summary>
+        /// <returns>CommonResponse<ICollection<Account>></returns>
         [AllureStep]
-        public new ICollection<Account> GetAllAccounts()
+        public new CommonResponse<ICollection<Account>> GetAllAccounts()
         {
             var response = base.GetAllAccounts();
-            Assert.IsTrue(response.StatusCode.Equals(HttpStatusCode.OK) || response.StatusCode.Equals(HttpStatusCode.NotFound));
-            Assert.IsNotNull(response.Content);
-            var jsonResponse = JObject.Parse(response.Content);
-            return JsonConvert.DeserializeObject<ICollection<Account>>(jsonResponse.SelectToken("$.recentItems").ToString());
+            return Common.ParseContent<ICollection<Account>>(response, responseBodyPart: response.Content == null ? null : JObject.Parse(response.Content).SelectToken("$.recentItems").ToString());
         }
 
+        /// <summary>
+        /// Get account by Id
+        /// </summary>
+        /// <param name="Id">Unique account Id</param>
+        /// <returns>CommonResponse<Account></returns>
         [AllureStep]
-        public new object GetAccountById(string Id)
+        public new CommonResponse<Account> GetAccountById(string Id)
         {
             var response = base.GetAccountById(Id);
-            Assert.IsTrue(response.StatusCode.Equals(HttpStatusCode.OK) || response.StatusCode.Equals(HttpStatusCode.NotFound));
-            Assert.IsNotNull(response.Content);
-            if(response.StatusCode.Equals(HttpStatusCode.OK)) 
-                return JsonConvert.DeserializeObject<Account>(response.Content);
-            else
-                return JsonConvert.DeserializeObject<ICollection<Error>>(response.Content);
+            return Common.ParseContent<Account>(response);
         }
 
+        /// <summary>
+        /// Create account
+        /// </summary>
+        /// <param name="account">Account model</param>
+        /// <returns>CommonResponse<CreateResponse></returns>
         [AllureStep]
-        public new object CreateAccount(Account account)
+        public new CommonResponse<CreateResponse> CreateAccount(Account account)
         {
             var response = base.CreateAccount(account);
-            Assert.IsTrue(response.StatusCode.Equals(HttpStatusCode.Created) || response.StatusCode.Equals(HttpStatusCode.BadRequest));
-            Assert.IsNotNull(response.Content);
-            if (response.StatusCode.Equals(HttpStatusCode.Created))
-                return JsonConvert.DeserializeObject<CreateResponse>(response.Content);
-            else
-                return JsonConvert.DeserializeObject<ICollection<Error>>(response.Content);
+            return Common.ParseContent<CreateResponse>(response);
         }
 
+        /// <summary>
+        /// Change account
+        /// </summary>
+        /// <param name="accountForChangeId">Id account for change</param>
+        /// <param name="account">JObject Account model. Set fields for change only</param>
+        /// <returns>CommonResponse<EmptyResponse></returns>
         [AllureStep]
-        public new object ChangeAccount(string accountForChangeId, JObject account)
+        public new CommonResponse<EmptyResponse> ChangeAccount(string accountForChangeId, JObject account)
         {
             var response = base.ChangeAccount(accountForChangeId, account);
-            Assert.IsTrue(response.StatusCode.Equals(HttpStatusCode.NoContent) || response.StatusCode.Equals(HttpStatusCode.BadRequest));
-            Assert.IsNotNull(response.Content);
-            if (response.StatusCode.Equals(HttpStatusCode.BadRequest))
-                return JsonConvert.DeserializeObject<ICollection<Error>>(response.Content);
-            else return null;
+            return Common.ParseContent<EmptyResponse>(response);
         }
 
+        /// <summary>
+        /// Delete account
+        /// </summary>
+        /// <param name="Id">Unique account Id</param>
+        /// <returns>CommonResponse<EmptyResponse></returns>
         [AllureStep]
-        public new object DeleteAccount(string Id)
+        public new CommonResponse<EmptyResponse> DeleteAccount(string Id)
         {
             var response = base.DeleteAccount(Id);
-            Assert.IsTrue(response.StatusCode.Equals(HttpStatusCode.NoContent) || response.StatusCode.Equals(HttpStatusCode.NotFound));
-            Assert.IsNotNull(response.Content);
-            if (response.StatusCode.Equals(HttpStatusCode.NotFound))
-                return JsonConvert.DeserializeObject<ICollection<Error>>(response.Content);
-            else return null;
+            return Common.ParseContent<EmptyResponse>(response);
         }
 
+        /// <summary>
+        /// Get random account
+        /// </summary>
+        /// <returns>Account</returns>
         [AllureStep]
         public Account GetAndReturnRandomAccount()
         {
-            var allAccountCollection = GetAllAccounts();
-            allAccountCollection.Remove(allAccountCollection.First(a => a.Id.Equals(AccountBuilder.DefaultAcccount().Id)));
-            var randomAccount = allAccountCollection.FirstOrDefault();
-            return (Account)GetAccountById(randomAccount.Id);
+            var allAccountCollection = GetAllAccounts().Data;
+            allAccountCollection?.Remove(allAccountCollection.First(a => a.Id.Equals(AccountBuilder.DefaultAcccount().Id)));
+            var randomAccount = allAccountCollection?.FirstOrDefault();
+            return GetAccountById(randomAccount.Id).Data;
         }
     }
 }
