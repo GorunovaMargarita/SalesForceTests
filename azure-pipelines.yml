@@ -24,9 +24,22 @@ steps:
   inputs:
     command: 'build'
     arguments: '--configuration Debug'
+- task: FileTransform@1
+  displayName: 'File Transform'
+  inputs:
+    folderPath: '$(System.DefaultWorkingDirectory)'
+    fileType: json
+    targetFiles: SalesForceTests/Configs/appsettings.Debug.json
+
+- task: VSBuild@1
+  displayName: 'Build solution **\*.sln'
+  inputs:
+    solution: '$(Parameters.solution)'
+    vsVersion: '17.0'
+    configuration: '$(BuildConfiguration)'
 
 - task: VSTest@3
-  displayName: 'Run test'
+  displayName: 'VsTest - testAssemblies'
   inputs:
-    runSettingsFile: 'SalesForceTests\Configs\appsettings.Debug.json'
-    overrideTestrunParameters: '-API.Token ${token}'
+    testAssemblyVer2: '**\Tests.dll'
+    testFiltercriteria: 'TestCategory=UI'
