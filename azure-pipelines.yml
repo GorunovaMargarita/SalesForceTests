@@ -28,5 +28,5 @@ steps:
 - task: VSTest@3
   displayName: 'Run test'
   inputs:
-    runSettingsFile: 'Test\Configs\appsettings.Debug.json'
+    runSettingsFile: 'SalesForceTests\Configs\appsettings.Debug.json'
     overrideTestrunParameters: '-API.Token ${token}'
