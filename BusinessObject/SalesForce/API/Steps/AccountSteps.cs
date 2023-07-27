@@ -12,7 +12,7 @@ namespace BusinessObject.SalesForce.API.Steps
         /// <summary>
         /// Get all accounts
         /// </summary>
-        /// <returns>CommonResponse<ICollection<Account>></returns>
+        /// <returns>CommonResponse&lt;ICollection&lt;Account&gt;&gt;</returns>
         [AllureStep]
         public new CommonResponse<ICollection<Account>> GetAllAccounts()
         {
@@ -24,7 +24,7 @@ namespace BusinessObject.SalesForce.API.Steps
         /// Get account by Id
         /// </summary>
         /// <param name="Id">Unique account Id</param>
-        /// <returns>CommonResponse<Account></returns>
+        /// <returns>CommonResponse&lt;Account&gt;</returns>
         [AllureStep]
         public new CommonResponse<Account> GetAccountById(string Id)
         {
@@ -36,7 +36,7 @@ namespace BusinessObject.SalesForce.API.Steps
         /// Create account
         /// </summary>
         /// <param name="account">Account model</param>
-        /// <returns>CommonResponse<CreateResponse></returns>
+        /// <returns>CommonResponse&lt;CreateResponse&gt;</returns>
         [AllureStep]
         public new CommonResponse<CreateResponse> CreateAccount(Account account)
         {
@@ -49,7 +49,7 @@ namespace BusinessObject.SalesForce.API.Steps
         /// </summary>
         /// <param name="accountForChangeId">Id account for change</param>
         /// <param name="account">JObject Account model. Set fields for change only</param>
-        /// <returns>CommonResponse<EmptyResponse></returns>
+        /// <returns>CommonResponse&lt;EmptyResponse&gt;</returns>
         [AllureStep]
         public new CommonResponse<EmptyResponse> ChangeAccount(string accountForChangeId, JObject account)
         {
@@ -61,7 +61,7 @@ namespace BusinessObject.SalesForce.API.Steps
         /// Delete account
         /// </summary>
         /// <param name="Id">Unique account Id</param>
-        /// <returns>CommonResponse<EmptyResponse></returns>
+        /// <returns>CommonResponse&lt;EmptyResponse&gt;</returns>
         [AllureStep]
         public new CommonResponse<EmptyResponse> DeleteAccount(string Id)
         {

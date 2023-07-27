@@ -14,16 +14,16 @@ namespace BusinessObject.SalesForce.UI.Steps
         /// Init account creation
         /// </summary>
         /// <param name="user">SalesForce user</param>
-        /// <returns>NewContactModal page</returns>
-        public NewContactModal InitContactCreation(User user = null)
+        /// <returns>ContactModal page</returns>
+        public ContactModal InitContactCreation(User user = null)
         {
             user ??= UserBuilder.GetSalesForceUser();
             new LoginPage()
                .Open()
                .Login(user)
                .GoToContactPage()
-               .OpenNewContactModal();
-            return new NewContactModal();
+               .OpenContactModal();
+            return new ContactModal();
         }
 
         /// <summary>

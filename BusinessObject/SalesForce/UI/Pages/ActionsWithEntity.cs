@@ -1,6 +1,7 @@
 ﻿
 
 using BusinessObject.SalesForce.Model;
+using Core;
 using Core.Elements;
 using Core.Helpers;
 using OpenQA.Selenium;
@@ -46,6 +47,7 @@ namespace BusinessObject.SalesForce.UI.Pages
                 return;
             input.GetElement().Clear();
             input.EnterText(valueMustBe.ToString());
+            Log.Instance.Logger.Info($"Property {propertyName} value changed to {valueMustBe}");
         }
 
         /// <summary>
@@ -61,6 +63,7 @@ namespace BusinessObject.SalesForce.UI.Pages
             if (valueMustBe == dropDown.GetElement().Text || valueMustBe == null)
                 return;
             dropDown.Select(valueMustBe.ToString());
+            Log.Instance.Logger.Info($"Property {propertyName} value changed to {valueMustBe}");
         }
 
         /// <summary>
@@ -78,6 +81,7 @@ namespace BusinessObject.SalesForce.UI.Pages
             if (propertyName.Equals("ParentAccount") && !String.IsNullOrEmpty(partialTextDropDown.GetElement().GetAttribute("value")))
                 partialTextDropDown.Clear();
             partialTextDropDown.Select(valueMustBe.ToString());
+            Log.Instance.Logger.Info($"Property {propertyName} value changed to {valueMustBe}");
         }
     }
 }

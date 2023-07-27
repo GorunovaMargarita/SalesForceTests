@@ -10,6 +10,9 @@ namespace BusinessObject.SalesForce.UI.Pages
     public class AccountPage : ActionsWithEntity
     {
         private string Url = $"https://{Configurator.Browser.Server}/lightning/o/Account/list?filterName=Recent";
+
+        private string optionalTemplateForActionButton = "//a[@data-recordid='{0}']/../../../td//a";
+
         Button newAccountButton = new(By.XPath("//div[@title='New']"));
         Button accountButton = new(By.XPath("//span[text()='Accounts']"));
 
@@ -26,12 +29,21 @@ namespace BusinessObject.SalesForce.UI.Pages
             return this;
         }
 
-        public NewAccountModal OpenNewAccountModal()
+        /// <summary>
+        /// Open new account modal
+        /// </summary>
+        /// <returns>AccountModal page</returns>
+        public AccountModal OpenNewAccountModal()
         {
             newAccountButton.GetElement().Click();
-            return new NewAccountModal();
+            return new AccountModal();
         }
 
+        /// <summary>
+        /// Check success message text about creation account
+        /// </summary>
+        /// <param name="accountName">Account name</param>
+        /// <returns>AccountPage</returns>
         public AccountPage CheckCreateSuccessMessage(string accountName)
         {
             string text = GetMessageText(messageElement);
@@ -40,6 +52,11 @@ namespace BusinessObject.SalesForce.UI.Pages
             return this;
         }
 
+        /// <summary>
+        /// Check success message text about deletion account
+        /// </summary>
+        /// <param name="accountName">Account name</param>
+        /// <returns>AccountPage</returns>
         public AccountPage CheckDeleteSuccessMessage(string accountName)
         {
             string text = GetMessageText(messageElement);
@@ -48,6 +65,10 @@ namespace BusinessObject.SalesForce.UI.Pages
             return this;
         }
 
+        /// <summary>
+        /// Reload account page 
+        /// </summary>
+        /// <returns>AccountPage</returns>
         public AccountPage ReloadAccounts()
         {
             driver.Navigate().Refresh();
@@ -56,10 +77,15 @@ namespace BusinessObject.SalesForce.UI.Pages
             return this;
         }
 
-        public AccountPage DeleteAccount(string accountName)
+        /// <summary>
+        /// Delete account
+        /// </summary>
+        /// <param name="propertyValueForSearch">Property value for search</param>
+        /// <returns>AccountPage</returns>
+        public AccountPage DeleteAccount(string propertyValueForSearch)
         {
             WaitHelper.WaitPageLoaded(driver);
-            searchFieldInput.EnterText(accountName);
+            searchFieldInput.EnterText(propertyValueForSearch);
             WaitHelper.WaitPageLoaded(driver);
             WaitHelper.WaitElementsCountMoreThen(driver, tableRow.Locator, 0);
             Thread.Sleep(10000);
@@ -69,23 +95,53 @@ namespace BusinessObject.SalesForce.UI.Pages
             return this;
         }
 
-        public NewAccountModal InitAccountChange(string accountName)
+        /// <summary>
+        /// Init firest account with property value change
+        /// </summary>
+        /// <param name="propertyValueForSearch">Property value for search</param>
+        /// <returns>AccountModal</returns>
+        public AccountModal InitAccountChange(string propertyValueForSearch)
         {
             WaitHelper.WaitPageLoaded(driver);
-            searchFieldInput.EnterText(accountName);
+            searchFieldInput.EnterText(propertyValueForSearch);
             WaitHelper.WaitPageLoaded(driver);
             WaitHelper.WaitElementsCountMoreThen(driver, tableRow.Locator, 0);
             Thread.Sleep(10000);
             actionButton.GetElement().Click();
             editButton.GetElement().Click();
-            return new NewAccountModal();
+            return new AccountModal();
         }
 
-        public AccountPage CheckAccountWithAttExist(string attribute)
+        /// <summary>
+        /// Init account change
+        /// </summary>
+        /// <param name="propertyValueForSearch">Property value for search</param>
+        /// <param name="id">Unique account id</param>
+        /// <returns>AccountModal</returns>
+        public AccountModal InitAccountChange(string propertyValueForSearch, string id)
         {
-            Log.Instance.Logger.Info($"Search contact by attribute: {attribute}");
-            searchFieldInput.EnterText(attribute);
-            driver.FindElements(By.XPath($"//*[text()='{attribute}']")).Count().Should().BeGreaterThan(0);
+            WaitHelper.WaitPageLoaded(driver);
+            searchFieldInput.EnterText(propertyValueForSearch);
+            WaitHelper.WaitPageLoaded(driver);
+            WaitHelper.WaitElementsCountMoreThen(driver, tableRow.Locator, 0);
+            Thread.Sleep(10000);
+            Button actionWithIdButton = new(optionalTemplateForActionButton, id);
+            actionWithIdButton.GetElement().Click();
+            editButton.GetElement().Click();
+            return new AccountModal();
+        }
+
+        /// <summary>
+        /// Check account exist
+        /// </summary>
+        /// <param name="propertyValueForSearch">Property value for search</param>
+        /// <returns>AccountPage</returns>
+        public AccountPage CheckAccountWithAttExist(string propertyValueForSearch)
+        {
+            Log.Instance.Logger.Info($"Search contact by attribute: {propertyValueForSearch}");
+            searchFieldInput.EnterText(propertyValueForSearch);
+            driver.FindElements(By.XPath($"//*[text()='{propertyValueForSearch}']")).Count().Should().BeGreaterThan(0);
+            Log.Instance.Logger.Info("Account exist");
             return this;
         }
     }

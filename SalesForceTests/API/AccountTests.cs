@@ -20,7 +20,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Create accounts: positive")]
+        [AllureSubSuite("Account")]
         public void Post_CreateAccount_OnlyRequiredAttributes_Created()
         {
             var accountForCreation = AccountBuilder.WithOnlyRequiredProperties();
@@ -41,7 +41,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Create accounts: positive")]
+        [AllureSubSuite("Account")]
         public void Post_CreateAccount_WithBillingAddress_Created()
         {
             var accountForCreation = AccountBuilder.WithBillingAddress();
@@ -74,7 +74,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Create accounts: negative")]
+        [AllureSubSuite("Account")]
         public void Post_CreateAccount_RequiredPropertyEmpty_BadRequest()
         {
             var response = ApiSteps.AccountSteps.CreateAccount(AccountBuilder.WithEmptyRequiredProperty());
@@ -88,7 +88,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Create accounts: negative")]
+        [AllureSubSuite("Account")]
         public void Post_CreateAccount_RequiredPropertyMiss_BadRequest()
         {
             var response = ApiSteps.AccountSteps.CreateAccount(AccountBuilder.WithoutRequiredProperty());
@@ -106,7 +106,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("GET accounts")]
+        [AllureSubSuite("Account")]
         public void Get_AllAccounts_OK()
         {
             var response = ApiSteps.AccountSteps.GetAllAccounts();
@@ -121,7 +121,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("GET accounts")]
+        [AllureSubSuite("Account")]
         public void Get_AccountById_OK()
         {
             var response = ApiSteps.AccountSteps.GetAccountById(controlAccount.Id);
@@ -136,7 +136,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("GET accounts")]
+        [AllureSubSuite("Account")]
         public void Get_AccountById_UnknownAccount_OK()
         {
             var unknownAccountId = "Unknown";
@@ -153,7 +153,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Change accounts: positive")]
+        [AllureSubSuite("Account")]
         public void Patch_ChangeAccount_LastName_NoContent()
         {
             var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
@@ -175,7 +175,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Change accounts: positive")]
+        [AllureSubSuite("Account")]
         public void Patch_ChangeAccount_Phone_NoContent()
         {
             var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
@@ -197,7 +197,7 @@ namespace Tests.API
         [AllureTag("Additional")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Change accounts: negative")]
+        [AllureSubSuite("Account")]
         public void Patch_ChangeAccount_InvalidField_BadRequest()
         {
             var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
@@ -216,7 +216,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Delete account")]
+        [AllureSubSuite("Account")]
         public void Delete_RandomAccount_OK()
         {
             var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
@@ -238,7 +238,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Delete account")]
+        [AllureSubSuite("Account")]
         public void Delete_NotExistingAccount_NotFound()
         {
             var unknownAccountId = "Unknown";
