@@ -11,7 +11,7 @@ namespace BusinessObject.SalesForce.API.Steps
         /// <summary>
         /// Get all contacts
         /// </summary>
-        /// <returns>CommonResponse<ICollection<Contact>></returns>
+        /// <returns>CommonResponse&lt;ICollection&lt;Contact&gt;&gt;</returns>
         [AllureStep]
         public new CommonResponse<ICollection<Contact>> GetAllContacts()
         {
@@ -23,7 +23,7 @@ namespace BusinessObject.SalesForce.API.Steps
         /// Get contact by Id
         /// </summary>
         /// <param name="Id">Unique contact Id</param>
-        /// <returns>CommonResponse<Contact></returns>
+        /// <returns>CommonResponse&lt;Contact&gt;</returns>
         [AllureStep]
         public new CommonResponse<Contact> GetContactById(string Id)
         {
@@ -35,7 +35,7 @@ namespace BusinessObject.SalesForce.API.Steps
         /// Create contact
         /// </summary>
         /// <param name="contact">Contact model</param>
-        /// <returns>CommonResponse<CreateResponse></returns>
+        /// <returns>CommonResponse&lt;CreateResponse&gt;</returns>
         [AllureStep]
         public new CommonResponse<CreateResponse> CreateContact(Contact contact)
         {
@@ -48,7 +48,7 @@ namespace BusinessObject.SalesForce.API.Steps
         /// </summary>
         /// <param name="contactForChangeId">Id contact for change</param>
         /// <param name="contact">JObject Contact model. Set fields for change only</param>
-        /// <returns>CommonResponse<EmptyResponse></returns>
+        /// <returns>CommonResponse&lt;EmptyResponse&gt;</returns>
         [AllureStep]
         public new CommonResponse<EmptyResponse> ChangeContact(string contactForChangeId, JObject contact)
         {
@@ -60,7 +60,7 @@ namespace BusinessObject.SalesForce.API.Steps
         /// Delete contact
         /// </summary>
         /// <param name="Id">Unique contact Id</param>
-        /// <returns>CommonResponse<EmptyResponse></returns>
+        /// <returns>CommonResponse&lt;EmptyResponse&gt;</returns>
         [AllureStep]
         public new CommonResponse<EmptyResponse> DeleteContact(string Id)
         {
@@ -77,8 +77,19 @@ namespace BusinessObject.SalesForce.API.Steps
         {
             var allContactCollection = GetAllContacts().Data;
             allContactCollection?.Remove(allContactCollection.First(a => a.Id.Equals(ContactBuilder.DefaultContact().Id)));
-            var randomContact = allContactCollection?.FirstOrDefault();
+            var randomContact = allContactCollection.ElementAt(new Random().Next(allContactCollection.Count - 1));
             return GetContactById(randomContact.Id).Data;
+        }
+
+        /// <summary>
+        /// Create and get new contact
+        /// </summary>
+        /// <param name="contact">Contact model</param>
+        /// <returns>Contact</returns>
+        public Contact CreateAndGetContact(Contact contact)
+        {
+            var newContactId = CreateContact(contact).Data.Id;
+            return GetContactById(newContactId).Data;
         }
     }
 }

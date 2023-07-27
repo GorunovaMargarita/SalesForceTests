@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Microsoft.VisualBasic.FileIO;
+using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,10 @@ namespace Core.Elements
         }
 
         public Button(string value) : base($"//button[@name='{value}']")
+        {
+        }
+
+        public Button(string template, string value) : base(string.Format(template, value))
         {
         }
     }

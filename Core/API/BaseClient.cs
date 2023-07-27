@@ -1,10 +1,6 @@
-﻿using NLog;
-using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using RestSharp;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Core.API
 {
@@ -31,7 +27,7 @@ namespace Core.API
         {
             Log.Instance.Logger.Info($"Request method: {request.Method},\r\n URI: {restClient.BuildUri(request)}");
             Log.Instance.Logger.Info(RequestToLog(request));
-            var response = restClient.Execute(request);
+            var response = restClient.Execute<RestResponse>(request);
             Log.Instance.Logger.Info($"Response content: {response.Content.Normalize()}");
             return response;
         }
