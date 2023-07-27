@@ -38,5 +38,8 @@ steps:
 - task: VSTest@3
   displayName: 'Run UI tests'
   inputs:
-    testAssemblyVer2: '**\Tests.dll'
+    testAssemblyVer2: |
+     **\Tests.dll
+     !**\*TestAdapter.dll
+     !**\obj\**
     testFiltercriteria: 'TestCategory=UI'
