@@ -24,7 +24,7 @@ This solution is a test framework for product SalesForce. It has 3 layer archite
 **Specify the expected outcome of tests:** FluentAssertions
 
 
-## Quik start
+## Quick start
 1. Register in [Sales Force](https://developer.salesforce.com) and activate your account with email.
 2. Get API token via instruction [Sales Force CLI instruction](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart_oauth.htm).
 3. Clone repository [Sales Force tests repository](https://github.com/GorunovaMargarita/SalesForceTests). 
@@ -33,7 +33,7 @@ This solution is a test framework for product SalesForce. It has 3 layer archite
 6. Edit appsettings.json, appsettings.Debug.json, appsettings.Prod.json. Set your values.
 6. Buid solution.
 
-## Running Tests
+## Run Tests
 
 For run test using .NET CLI, run the following command
 
