@@ -1,5 +1,5 @@
 # SalesForceTests
-This solution is a test framework for produc SalesForce. It has 3 layer architecture: buissness object of Sales Force, core with code that can be reused, and test for SalesForce. This solution was created by me during my c# automation testing learning in TeachMeSkills school.
+This solution is a test framework for produc SalesForce. It has 3 layer architecture: business object of Sales Force, core with code that can be reused, and test for SalesForce. This solution was created by me during my c# automation testing learning in TeachMeSkills school.
 
 
 ## Authors
