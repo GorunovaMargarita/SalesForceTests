@@ -1,5 +1,5 @@
 ﻿using BusinessObject.SalesForce.Model;
-
+using System.Text;
 
 namespace BusinessObject.SalesForce
 {
@@ -16,7 +16,14 @@ namespace BusinessObject.SalesForce
         public static Contact WithOnlyRequiredProperties() =>
             new Contact()
             {
-                LastName = Faker.NameFaker.LastName()
+                LastName = Faker.NameFaker.LastName(),
+            };
+        public static Contact WithFullNameAndSalutation() =>
+            new Contact()
+            {
+                LastName = Faker.NameFaker.LastName(),
+                FirstName = Faker.NameFaker.FirstName(),
+                Salutation = "Ms."
             };
 
         public static Contact WithFullName()
@@ -38,7 +45,6 @@ namespace BusinessObject.SalesForce
             new Contact()
             {
                 LastName = Faker.NameFaker.LastName(),
-                FirstName = Faker.NameFaker.FirstName(),
                 Birthdate = Faker.DateTimeFaker.BirthDay().ToString("dd.MM.yyyy")
             };
 
@@ -56,6 +62,33 @@ namespace BusinessObject.SalesForce
             var contact = WithOnlyRequiredProperties();
             contact.LastName = Faker.NameFaker.LastName() + System.DateTime.Now.ToString();
             return contact;
+        }
+
+        public static Contact WithLongDescription()
+        {
+            var contact = WithOnlyRequiredProperties();
+            contact.Description = StringGenerator(4000);
+            return contact;
+        }
+
+        public static Contact WithMediumDescription()
+        {
+            var contact = WithOnlyRequiredProperties();
+            contact.Description = StringGenerator(100);
+            return contact;
+        }
+
+        private static string StringGenerator(int length)
+        {
+            const string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ+-*/`~!#№$:;%^&?<>«»    ";
+            StringBuilder stringBuilder = new StringBuilder(); 
+            Random rnd = new Random();
+            for (int i = 0; i < length; i++)
+            {
+                int index = rnd.Next(chars.Length);
+                stringBuilder.Append(chars[index]);
+            }
+            return stringBuilder.ToString();
         }
     }
 }

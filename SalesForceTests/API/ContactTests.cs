@@ -20,7 +20,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Create accounts: positive")]
+        [AllureSubSuite("Contact")]
         public void Post_CreateContact_OnlyRequiredAttributes_Created()
         {
             SharedStep_SendAndCheckSuccess(ContactBuilder.WithOnlyRequiredProperties());
@@ -30,7 +30,7 @@ namespace Tests.API
         [AllureTag("Additional")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Create accounts: positive")]
+        [AllureSubSuite("Contact")]
         public void Post_CreateContact_WithFullName_Created()
         {
             SharedStep_SendAndCheckSuccess(ContactBuilder.WithFullName());
@@ -40,7 +40,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Create contacts: negative")]
+        [AllureSubSuite("Contact")]
         public void Post_CreateContact_RequiredPropertyMiss_BadRequest()
         {
             var response = ApiSteps.ContactSteps.CreateContact(ContactBuilder.WithoutRequiredProperty());
@@ -54,7 +54,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Create contacts: negative")]
+        [AllureSubSuite("Contact")]
         public void Post_CreateContact_IncorrectBirthdateFormat_BadRequest()
         {
             var contactForCreation = ContactBuilder.WithBirtdateIncorrectFormat();
@@ -93,7 +93,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("GET contacts")]
+        [AllureSubSuite("Contact")]
         public void Get_AllContacts_OK()
         {
             var response = ApiSteps.ContactSteps.GetAllContacts();
@@ -108,7 +108,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("GET contacts")]
+        [AllureSubSuite("Contact")]
         public void Get_ContactById_OK()
         {
             var response = ApiSteps.ContactSteps.GetContactById(controlContact.Id);
@@ -123,7 +123,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("GET contacts")]
+        [AllureSubSuite("Contact")]
         public void Get_ContactById_UnknownContact_OK()
         {
             var unknownContactId = "Unknown";
@@ -140,7 +140,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Change contacts: positive")]
+        [AllureSubSuite("Contact")]
         public void Patch_ChangeContact_LastName_NoContent()
         {
             var contact = ApiSteps.ContactSteps.GetAndReturnRandomContact();
@@ -163,7 +163,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Change contacts: positive")]
+        [AllureSubSuite("Contact")]
         public void Patch_ChangeContact_Phone_NoContent()
         {
             var contact = ApiSteps.ContactSteps.GetAndReturnRandomContact();
@@ -185,7 +185,7 @@ namespace Tests.API
         [AllureTag("Additional")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Change contacts: negative")]
+        [AllureSubSuite("Contact")]
         public void Patch_ChangeContact_InvalidField_BadRequest()
         {
             var contact = ApiSteps.ContactSteps.GetAndReturnRandomContact();
@@ -204,7 +204,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Delete contact")]
+        [AllureSubSuite("Contact")]
         public void Delete_RandomContact_OK()
         {
             var contact = ApiSteps.ContactSteps.GetAndReturnRandomContact();
@@ -226,7 +226,7 @@ namespace Tests.API
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
-        [AllureSubSuite("Delete contact")]
+        [AllureSubSuite("Contact")]
         public void Delete_NotExistingContact_NotFound()
         {
             var unknownContactId = "Unknown";

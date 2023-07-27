@@ -3,11 +3,12 @@ using Core;
 using Core.Elements;
 using Core.Helpers;
 using NUnit.Allure.Attributes;
+using NUnit.Framework;
 using OpenQA.Selenium;
 
 namespace BusinessObject.SalesForce.UI.Pages
 {
-    public class NewAccountModal : ActionsWithEntity
+    public class AccountModal : ActionsWithEntity
     {
         Input accountNameInput = new("Account Name");
         Input accountNumberInput = new("Account Number");
@@ -52,9 +53,9 @@ namespace BusinessObject.SalesForce.UI.Pages
         /// Fill new account form
         /// </summary>
         /// <param name="account">Account entity</param>
-        /// <returns>NewAccountModal page</returns>
+        /// <returns>AccountModal page</returns>
         [AllureStep]
-        public NewAccountModal FillNewAccountForm(Account account)
+        public AccountModal FillNewAccountForm(Account account)
         {
             Log.Instance.Logger.Info($"Account model:\r\n{account.ToString()}");
 
@@ -98,9 +99,9 @@ namespace BusinessObject.SalesForce.UI.Pages
         /// Change account data on edit form
         /// </summary>
         /// <param name="account">Account entity. Set only changable property values</param>
-        /// <returns>NewAccountModal page</returns>
+        /// <returns>AccountModal page</returns>
         [AllureStep]
-        public NewAccountModal EditData(Account account)
+        public AccountModal EditData(Account account)
         {
             ChangeTextValue(account, "AccountName", accountNameInput);
             ChangeTextValue(account, "AccountNumber", accountNumberInput);
@@ -152,9 +153,9 @@ namespace BusinessObject.SalesForce.UI.Pages
         /// <summary>
         /// Confirm account creation and init new account creation
         /// </summary>
-        /// <returns>NewAccountModal page</returns>
+        /// <returns>AccountModal page</returns>
         [AllureStep]
-        public NewAccountModal ConfirmAndNewAccountCreation()
+        public AccountModal ConfirmAndNewAccountCreation()
         {
             saveAndNewButton.GetElement().Click();
             return this;

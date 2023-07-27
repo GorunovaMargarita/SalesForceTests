@@ -7,7 +7,7 @@ using BusinessObject.SalesForce.Model;
 
 namespace BusinessObject.SalesForce.UI.Pages
 {
-    public class NewContactModal : ActionsWithEntity
+    public class ContactModal : ActionsWithEntity
     {
         Input firstNameInput = new("First Name");
         Input lastNameInput = new("Last Name");
@@ -45,6 +45,7 @@ namespace BusinessObject.SalesForce.UI.Pages
         Button saveButton = new("SaveEdit");
         Button saveAndNewButton = new("SaveAndNew");
         Button CancelButton = new("CancelEdit");
+        Button uploadButton = new(By.XPath("//span[text()='Upload Files']"));
 
         PartialTextDropDown reportsToDropDown = new("Reports To");
 
@@ -53,9 +54,9 @@ namespace BusinessObject.SalesForce.UI.Pages
         /// Fill new contact form
         /// </summary>
         /// <param name="contact">Contact entity</param>
-        /// <returns>NewContactModal page</returns>
+        /// <returns>ContactModal page</returns>
         [AllureStep]
-        public NewContactModal FillNewContactForm(Contact contact)
+        public ContactModal FillNewContactForm(Contact contact)
         {
             Log.Instance.Logger.Info($"Contact model:\r\n{contact.ToString()}");
 
@@ -96,9 +97,9 @@ namespace BusinessObject.SalesForce.UI.Pages
         /// Change account data on edit form
         /// </summary>
         /// <param name="contact">Account entity. Set only changable property values</param>
-        /// <returns>NewAccountModal page</returns>
+        /// <returns>ContactModal page</returns>
         [AllureStep]
-        public NewContactModal EditData(Contact contact)
+        public ContactModal EditData(Contact contact)
         {
             ChangeTextValue(contact, "AccountName", accountNameInput);
             ChangeTextValue(contact, "FirstName", firstNameInput);
@@ -143,16 +144,17 @@ namespace BusinessObject.SalesForce.UI.Pages
         public ContactPage ConfirmContactCreateOrEdit()
         {
             saveButton.GetElement().Click();
-            //WaitHelper.WaitElement(driver, By.CssSelector("span[title=Follow]"));
+            // WaitHelper.WaitElement(driver, uploadButton.Locator, 100);
+            WaitHelper.WaitPageLoaded(driver, 100);
             return new ContactPage();
         }
 
         /// <summary>
         /// Confirm contact creation and init new contact creation
         /// </summary>
-        /// <returns>NewContactModal page</returns>
+        /// <returns>ContactModal page</returns>
         [AllureStep]
-        public NewContactModal ConfirmAndNewContactCreation()
+        public ContactModal ConfirmAndNewContactCreation()
         {
             saveAndNewButton.GetElement().Click();
             return this;

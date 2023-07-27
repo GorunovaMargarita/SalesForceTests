@@ -17,7 +17,7 @@ namespace Tests.UI
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("UI Tests")]
-        [AllureSubSuite("CreateNewAccount")]
+        [AllureSubSuite("Account")]
         public void CreateNewAccount_OnlyRequiredAtts_Created()
         {
             var account = AccountBuilder.WithOnlyRequiredProperties();
@@ -34,7 +34,7 @@ namespace Tests.UI
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("UI Tests")]
-        [AllureSubSuite("CreateNewAccount")]
+        [AllureSubSuite("Account")]
         public void CreateNewAccount_FullAccountInformationPart_Created()
         {
             Account account = AccountBuilder.GetAccountWithFullAccountInfoPart();
@@ -53,13 +53,13 @@ namespace Tests.UI
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("UI Tests")]
-        [AllureSubSuite("Change account")]
+        [AllureSubSuite("Account")]
         public void ChangeAccount_AccountName_Ok()
         {
             var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
             var patchedAccount = new Account() { AccountName = Faker.InternetFaker.Email() };
             UiSteps.AccountSteps.OpenAccountPage()
-                                .InitAccountChange(account.AccountName)
+                                .InitAccountChange(account.AccountName, account.Id)
                                 .EditData(patchedAccount)
                                 .ConfirmAccountCreateOrEdit();
             //need time to save changes or clear cache
@@ -71,14 +71,14 @@ namespace Tests.UI
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("UI Tests")]
-        [AllureSubSuite("Change account")]
+        [AllureSubSuite("Account")]
         public void ChangeAccount_Type_Ok()
         {
             var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
             string newType = "Technology Partner";
 
             UiSteps.AccountSteps.OpenAccountPage()
-                                .InitAccountChange(account.AccountName)
+                                .InitAccountChange(account.AccountName, account.Id)
                                 .EditData(new Account() { Type = newType })
                                 .ConfirmAccountCreateOrEdit();
             //need time to save changes or clear cache
@@ -90,7 +90,7 @@ namespace Tests.UI
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("UI Tests")]
-        [AllureSubSuite("Change account")]
+        [AllureSubSuite("Account")]
         public void ChangeAccount_ParentAccount_Ok()
         {
             var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
@@ -99,7 +99,7 @@ namespace Tests.UI
                 newParentAccount = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
             var patchedAccount = new Account() { ParentAccount = newParentAccount.AccountName };
             UiSteps.AccountSteps.OpenAccountPage()
-                                .InitAccountChange(account.AccountName)
+                                .InitAccountChange(account.AccountName, account.Id)
                                 .EditData(patchedAccount)
                                 .ConfirmAccountCreateOrEdit();
             //need time to save changes or clear cache
@@ -113,7 +113,7 @@ namespace Tests.UI
         [AllureTag("Smoke")]
         [AllureOwner("Margarita")]
         [AllureSuite("UI Tests")]
-        [AllureSubSuite("DeleteAccount")]
+        [AllureSubSuite("Account")]
         public void DeleteAccount_Ok()
         {
             //var accountName = "laura99@hotmail.com";
