@@ -63,5 +63,5 @@ where ``D:\DevProjects\DiplomaSolution\SalesForceTests\SalesForceTests\bin\Debug
 5. Allure report will be opened in your web browser.
 ## Feedback
 
-If you have any feedback, please reach out to us at margo.aleksandrova@ya.ru.
+If you have any feedback, please reach out to me at margo.aleksandrova@ya.ru.
 
