@@ -22,7 +22,7 @@ steps:
     restoreSolution: '**\*.sln'
 
 - task: FileTransform@1
-  displayName: 'File Transform'
+  displayName: 'Change appsettings'
   inputs:
     folderPath: '$(System.DefaultWorkingDirectory)'
     fileType: json
@@ -36,7 +36,7 @@ steps:
     configuration: '$(BuildConfiguration)'
 
 - task: VSTest@3
-  displayName: 'VsTest - testAssemblies'
+  displayName: 'Run UI tests'
   inputs:
     testAssemblyVer2: '**\Tests.dll'
     testFiltercriteria: 'TestCategory=UI'
