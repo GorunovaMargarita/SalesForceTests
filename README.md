@@ -1,6 +1,5 @@
 # SalesForceTests
-This solution is a test framework for produc SalesForce. It has 3 layer architecture: buissness object of Sales Force, core with code that can be reused, and test for SalesForce. This solution was created by me during my c# automation testing learning in TeachMeSkills school.
-
+This solution is a test framework for product SalesForce. It has 3 layer architecture: business object of Sales Force, core with code that can be reused, and test for SalesForce. This solution was created by me during my c# automation testing learning in TeachMeSkills school.
 
 ## Authors
 
@@ -24,16 +23,17 @@ This solution is a test framework for produc SalesForce. It has 3 layer architec
 **Specify the expected outcome of tests:** FluentAssertions
 
 
-## Quik start
+## Quick start
+
 1. Register in [Sales Force](https://developer.salesforce.com) and activate your account with email.
 2. Get API token via instruction [Sales Force CLI instruction](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart_oauth.htm).
 3. Clone repository [Sales Force tests repository](https://github.com/GorunovaMargarita/SalesForceTests). 
 4. Open solution in Visual studio (or other for C#).
-5. Create solution build configurations **Build** and **Prod**.
+5. Create solution build configurations **Debug** and **Prod**.
 6. Edit appsettings.json, appsettings.Debug.json, appsettings.Prod.json. Set your values.
 6. Buid solution.
 
-## Running Tests
+## Run Tests
 
 For run test using .NET CLI, run the following command
 
@@ -64,3 +64,5 @@ where ``D:\DevProjects\DiplomaSolution\SalesForceTests\SalesForceTests\bin\Debug
 ## Feedback
 
 If you have any feedback, please reach out to me at margo.aleksandrova@ya.ru.
+=======
+
