@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,12 @@ namespace Core.Elements
         {
             if (text != null)
             {
-                WebDriver.FindElement(locator).SendKeys(text);
+                WebDriver.FindElement(Locator).SendKeys(text);
+                new Actions(WebDriver)
+                     .MoveToElement(WebDriver.FindElement(Locator))
+                     .SendKeys(Keys.Enter)
+                     .Build()
+                     .Perform();
             }
         }
     }

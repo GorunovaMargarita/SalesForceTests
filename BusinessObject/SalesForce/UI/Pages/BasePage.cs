@@ -8,11 +8,7 @@ namespace BusinessObject.SalesForce.UI.Pages
     {
         protected IWebDriver driver;
 
-        public BasePage()
-        {
-            driver = Browser.Instance.Driver;
-        }
+        public BasePage() => driver = Browser.Instance.Driver;
 
-        public abstract BasePage Open();
     }
 }

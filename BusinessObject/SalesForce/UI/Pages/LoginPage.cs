@@ -13,17 +13,27 @@ namespace BusinessObject.SalesForce.UI.Pages
     {
         private string Url = $"https://{Configurator.Browser.Server}/lightning/page/home";
 
-        private Input userNameInput = new(By.XPath("//input[@name='username']"));
-        private Input passwordInput = new(By.XPath("//input[@name='pw']"));
         private Button loginButton = new(By.Id("Login"));
 
-        public override LoginPage Open()
+        private Input userNameInput = new(By.XPath("//input[@name='username']"));
+        private Input passwordInput = new(By.XPath("//input[@name='pw']"));
+
+        /// <summary>
+        /// Open login page by link
+        /// </summary>
+        /// <returns>LoginPage</returns>
+        public LoginPage Open()
         {
             Log.Instance.Logger.Info($"Navigate to url: {Url}");
             Browser.Instance.NavigateToUrl(Url);
             return this;
         }
 
+        /// <summary>
+        /// Login user
+        /// </summary>
+        /// <param name="user">SalesForce user</param>
+        /// <returns>HomePage</returns>
         [AllureStep]
         public HomePage Login(User user)
         {
@@ -32,15 +42,23 @@ namespace BusinessObject.SalesForce.UI.Pages
             return new HomePage();
         }
 
+        /// <summary>
+        /// Try to login
+        /// </summary>
+        /// <param name="user">SalesForce user</param>
+        /// <returns>LoginPage</returns>
         [AllureStep]
         public LoginPage TryToLogin(User user)
         {
             FillCredentials(user);
             loginButton.GetElement().Click();
-
             return this;
         }
 
+        /// <summary>
+        /// Fill credentials on login page
+        /// </summary>
+        /// <param name="user">SalesForce user</param>
         private void FillCredentials(User user)
         {
             Log.Instance.Logger.Info($"Credentials: {user}");

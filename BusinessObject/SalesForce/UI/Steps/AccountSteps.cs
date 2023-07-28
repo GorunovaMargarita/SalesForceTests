@@ -9,8 +9,8 @@ namespace BusinessObject.SalesForce.UI.Steps
         /// Init new account creation
         /// </summary>
         /// <param name="user">SalesForce user</param>
-        /// <returns>NewAccountModal page</returns>
-        public NewAccountModal InitAccountCreation(User user = null)
+        /// <returns>AccountModal page</returns>
+        public AccountModal InitAccountCreation(User user = null)
         {
             user ??= UserBuilder.GetSalesForceUser();
             new LoginPage()
@@ -18,7 +18,7 @@ namespace BusinessObject.SalesForce.UI.Steps
                .Login(user)
                .GoToAccountPage()
                .OpenNewAccountModal();
-            return new NewAccountModal();
+            return new AccountModal();
         }
 
         /// <summary>

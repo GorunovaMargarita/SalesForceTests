@@ -1,7 +1,6 @@
 # SalesForceTests
 This solution is a test framework for product SalesForce. It has 3 layer architecture: business object of Sales Force, core with code that can be reused, and test for SalesForce. This solution was created by me during my c# automation testing learning in TeachMeSkills school.
 
-
 ## Authors
 
 - [@GorunovaMargarita](https://github.com/GorunovaMargarita)
@@ -25,6 +24,7 @@ This solution is a test framework for product SalesForce. It has 3 layer archite
 
 
 ## Quick start
+
 1. Register in [Sales Force](https://developer.salesforce.com) and activate your account with email.
 2. Get API token via instruction [Sales Force CLI instruction](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart_oauth.htm).
 3. Clone repository [Sales Force tests repository](https://github.com/GorunovaMargarita/SalesForceTests). 
@@ -64,4 +64,5 @@ where ``D:\DevProjects\DiplomaSolution\SalesForceTests\SalesForceTests\bin\Debug
 ## Feedback
 
 If you have any feedback, please reach out to me at margo.aleksandrova@ya.ru.
+=======
 
