@@ -73,12 +73,13 @@ There are 24 API and 15 UI test cases which check CRUD operation with accounts a
 **Specify the expected outcome of tests:** FluentAssertions
 
 
-## Quik start
+## Quick start
+
 1. Register in [Sales Force](https://developer.salesforce.com) and activate your account with email.
 2. Get API token via instruction [Sales Force CLI instruction](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart_oauth.htm).
 3. Clone repository [Sales Force tests repository](https://github.com/GorunovaMargarita/SalesForceTests). 
 4. Open solution in Visual studio (or other for C#).
-5. Create solution build configurations **Build** and **Prod**.
+5. Create solution build configurations **Debug** and **Prod**.
 6. Edit appsettings.json, appsettings.Debug.json, appsettings.Prod.json. Set your values.
 6. Buid solution.
 
@@ -113,3 +114,5 @@ where ``D:\DevProjects\DiplomaSolution\SalesForceTests\SalesForceTests\bin\Debug
 ## Feedback
 
 If you have any feedback, please reach out to me at margo.aleksandrova@ya.ru.
+
+

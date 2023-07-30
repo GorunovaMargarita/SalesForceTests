@@ -1,0 +1,45 @@
+# Universal Windows Platform
+# Build a Universal Windows Platform project using Visual Studio.
+# Add steps that test and distribute an app, save build artifacts, and more:
+# https://aka.ms/yaml
+
+trigger:
+- develop
+
+pool:
+  name: 'Margaritas'
+
+steps:
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 6.x'
+  inputs:
+    versionSpec: 6.x
+    
+- task: NuGetCommand@2
+  displayName: 'Restore nuget package'
+  inputs:
+    command: 'restore'
+    restoreSolution: '**\*.sln'
+
+- task: FileTransform@1
+  displayName: 'Change appsettings'
+  inputs:
+    folderPath: '$(System.DefaultWorkingDirectory)'
+    fileType: json
+    targetFiles: SalesForceTests/Configs/appsettings.Debug.json
+
+- task: VSBuild@1
+  displayName: 'Build solution'
+  inputs:
+    solution: '**\*.sln'
+    vsVersion: '17.0'
+    configuration: '$(BuildConfiguration)'
+
+- task: VSTest@3
+  displayName: 'Run UI tests'
+  inputs:
+    testAssemblyVer2: |
+     **\Tests.dll
+     !**\*TestAdapter.dll
+     !**\obj\**
+    testFiltercriteria: 'TestCategory=UI'
