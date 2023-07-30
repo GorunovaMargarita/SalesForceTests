@@ -124,7 +124,7 @@ namespace Tests.API
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
         [AllureSubSuite("Contact")]
-        public void Get_ContactById_UnknownContact_OK()
+        public void Get_ContactById_UnknownContact_NotFound()
         {
             var unknownContactId = "Unknown";
             var response = ApiSteps.ContactSteps.GetContactById(unknownContactId);

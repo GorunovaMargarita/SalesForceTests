@@ -137,7 +137,7 @@ namespace Tests.API
         [AllureOwner("Margarita")]
         [AllureSuite("API Tests")]
         [AllureSubSuite("Account")]
-        public void Get_AccountById_UnknownAccount_OK()
+        public void Get_AccountById_UnknownAccount_NotFound()
         {
             var unknownAccountId = "Unknown";
             var response = ApiSteps.AccountSteps.GetAccountById(unknownAccountId);
