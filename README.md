@@ -13,12 +13,12 @@ There are 24 API and 15 UI test cases which check CRUD operation with accounts a
 |CreateNewContact_WithMediumDescription_Created|The test checks successfull contact creation with description most common data.|
 |CreateNewContact_WithPhones_Created|The test checks successfull contact creation with all phones information.|
 |CreateNewContact_Cancel_NotCreated|The test checks opportunity cancel account creation.|
-|changingAccount_AccountName_Ok|The test checks successfull account name changing.|
-|changingAccount_ParentAccount_Ok|The test checks successfull account parent account changing.|
-|changingAccount_Type_Ok|The test checks successfull account type changing.|
-|changingContact_Description_Ok|The test checks successfull contact description changing.|
-|changingContact_Level_Ok|The test checks successfull contact level changing.|
-|changingContact_Phone_Ok|The test checks successfull contact phone changing.|
+|ChageAccount_AccountName_Ok|The test checks successfull account name changing.|
+|ChageAccount_ParentAccount_Ok|The test checks successfull account parent account changing.|
+|ChageAccount_Type_Ok|The test checks successfull account type changing.|
+|ChageContact_Description_Ok|The test checks successfull contact description changing.|
+|ChageContact_Level_Ok|The test checks successfull contact level changing.|
+|ChageContact_Phone_Ok|The test checks successfull contact phone changing.|
 |DeleteAccount_Ok|The test checks successfull account deletion.|
 |DeleteContact_Ok|The test checks successfull contact deletion.|
 
