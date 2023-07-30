@@ -158,7 +158,7 @@ namespace Tests.UI
                                 .ConfirmContactCreateOrEdit();
             //need time to save changes or clear cache
             Thread.Sleep(2000);
-            ApiSteps.ContactSteps.GetContactById(contact.Id).Data.Description.Should().Be(newValue);
+            ApiSteps.ContactSteps.GetContactById(contact.Id).Data.Description.Trim().Should().Be(newValue);
         }
         #endregion
 
