@@ -64,30 +64,12 @@ namespace BusinessObject.SalesForce.UI.Pages
         }
 
         /// <summary>
-        /// Delete first contact with account name
-        /// </summary>
-        /// <param name="accountName">Account name</param>
-        /// <returns>ContactPage</returns>
-        public ContactPage DeleteContact(string accountName)
-        {
-            WaitHelper.WaitPageLoaded(driver);
-            searchFieldInput.EnterText(accountName);
-            WaitHelper.WaitPageLoaded(driver);
-            WaitHelper.WaitElementsCountMoreThen(driver, tableRow.Locator, 0);
-            Thread.Sleep(10000);
-            actionButton.GetElement().Click();
-            deleteButton.GetElement().Click();
-            confirmDeleteButton.GetElement().Click();
-            return this;
-        }
-
-        /// <summary>
         /// Delete contact by some property value and id
         /// </summary>
         /// <param name="propertyForSearch">Property value for contact search</param>
         /// <param name="id">Unique contact Id</param>
         /// <returns>ContactPage</returns>
-        public ContactPage DeleteContactById(string propertyForSearch, string id)
+        public ContactPage DeleteContact(string propertyForSearch, string id)
         {
             WaitHelper.WaitPageLoaded(driver);
             searchFieldInput.EnterText(propertyForSearch);
@@ -147,24 +129,6 @@ namespace BusinessObject.SalesForce.UI.Pages
             text.Should().Be(MessageContainer.UI.DeleteSuccessMessage("Contact", accountName));
             Log.Instance.Logger.Info($"Getted message correct: <{text}>");
             return this;
-        }
-
-        /// <summary>
-        /// Init first contact with property value change
-        /// </summary>
-        /// <param name="propertyValueForSearch">Property value for search</param>
-        /// <returns>ContactPage</returns>
-        public ContactModal InitContactChange(string propertyValueForSearch)
-        {
-            WaitHelper.WaitPageLoaded(driver);
-            searchFieldInput.EnterText(propertyValueForSearch);
-            Log.Instance.Logger.Info($"Search by value: {propertyValueForSearch}");
-            WaitHelper.WaitPageLoaded(driver);
-            WaitHelper.WaitElementsCountMoreThen(driver, tableRow.Locator, 0);
-            Thread.Sleep(10000);
-            actionButton.GetElement().Click();
-            editButton.GetElement().Click();
-            return new ContactModal();
         }
 
         /// <summary>

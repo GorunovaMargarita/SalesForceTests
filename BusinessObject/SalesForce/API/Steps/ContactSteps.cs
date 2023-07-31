@@ -2,6 +2,8 @@
 using NUnit.Allure.Attributes;
 using BusinessObject.SalesForce.Model;
 using BusinessObject.SalesForce.API.Services;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace BusinessObject.SalesForce.API.Steps
 {
@@ -16,7 +18,19 @@ namespace BusinessObject.SalesForce.API.Steps
         public new CommonResponse<ICollection<Contact>> GetAllContacts()
         {
             var response = base.GetAllContacts();
-            return Common.ParseContent<ICollection<Contact>>(response, responseBodyPart: response.Content == null ? null : JObject.Parse(response.Content).SelectToken("$.recentItems").ToString());
+            string responseBodyPart = null;
+            if (response.Content != null )
+            {
+                try
+                {
+                    responseBodyPart = JObject.Parse(response.Content).SelectToken("$.recentItems").ToString();
+                }
+                catch(Exception ex ) when (ex is JsonReaderException)
+                {
+                    responseBodyPart = null;
+                }
+            }
+            return Common.ParseContent<ICollection<Contact>>(response, responseBodyPart);
         }
 
         /// <summary>

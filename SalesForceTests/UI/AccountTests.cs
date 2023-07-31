@@ -119,7 +119,7 @@ namespace Tests.UI
             //var accountName = "laura99@hotmail.com";
             var account = ApiSteps.AccountSteps.GetAndReturnRandomAccount();
             UiSteps.AccountSteps.OpenAccountPage()
-                                .DeleteAccount(account.AccountName)
+                                .DeleteAccount(account.AccountName, account.Id)
                                 .CheckDeleteSuccessMessage(account.AccountName);
             ApiSteps.AccountSteps.GetAccountById(account.Id).StatusCode.Should().Be(HttpStatusCode.NotFound.ToString());
         }

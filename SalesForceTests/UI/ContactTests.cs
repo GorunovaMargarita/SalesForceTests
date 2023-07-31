@@ -172,7 +172,7 @@ namespace Tests.UI
         {
             var contact = ApiSteps.ContactSteps.GetAndReturnRandomContact();
             UiSteps.ContactSteps.OpenContactPage()
-                                .DeleteContactById(contact.AccountName, contact.Id)
+                                .DeleteContact(contact.AccountName, contact.Id)
                                 .CheckDeleteSuccessMessage(contact.AccountName);
             ApiSteps.ContactSteps.GetContactById(contact.Id).StatusCode.Should().Be(HttpStatusCode.NotFound.ToString());
         }
