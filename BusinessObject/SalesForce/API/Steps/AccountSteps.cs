@@ -1,9 +1,9 @@
 ﻿using BusinessObject.SalesForce.API.Services;
 using BusinessObject.SalesForce.Model;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Allure.Attributes;
-
-
+using System.Net;
 
 namespace BusinessObject.SalesForce.API.Steps
 {
@@ -17,7 +17,19 @@ namespace BusinessObject.SalesForce.API.Steps
         public new CommonResponse<ICollection<Account>> GetAllAccounts()
         {
             var response = base.GetAllAccounts();
-            return Common.ParseContent<ICollection<Account>>(response, responseBodyPart: response.Content == null ? null : JObject.Parse(response.Content).SelectToken("$.recentItems").ToString());
+            string responseBodyPart = null;
+            if (response.Content != null)
+            {
+                try
+                {
+                    responseBodyPart = JObject.Parse(response.Content).SelectToken("$.recentItems").ToString();
+                }
+                catch (Exception ex) when (ex is JsonReaderException)
+                {
+                    responseBodyPart = null;
+                }
+            }
+            return Common.ParseContent<ICollection<Account>>(response, responseBodyPart);
         }
 
         /// <summary>
