@@ -12,11 +12,13 @@ namespace BusinessObject.SalesForce.UI.Pages
         private string Url = $"https://{Configurator.Browser.Server}/lightning/o/Account/list?filterName=Recent";
 
         private string optionalTemplateForActionButton = "//a[@data-recordid='{0}']/../../../td//a";
+        private string optionalTemplateForElementWithText = "//*[text()='{0}']";
 
         Button newAccountButton = new(By.XPath("//div[@title='New']"));
         Button accountButton = new(By.XPath("//span[text()='Accounts']"));
 
         Input searchFieldInput = new(By.XPath("//Input[@name= 'Account-search-input']"));
+
 
         /// <summary>
         /// Open account page by link
@@ -81,36 +83,22 @@ namespace BusinessObject.SalesForce.UI.Pages
         /// Delete account
         /// </summary>
         /// <param name="propertyValueForSearch">Property value for search</param>
+        /// <param name="id">Unique account id</param>
         /// <returns>AccountPage</returns>
-        public AccountPage DeleteAccount(string propertyValueForSearch)
+        public AccountPage DeleteAccount(string propertyValueForSearch, string id)
         {
             WaitHelper.WaitPageLoaded(driver);
             searchFieldInput.EnterText(propertyValueForSearch);
             WaitHelper.WaitPageLoaded(driver);
             WaitHelper.WaitElementsCountMoreThen(driver, tableRow.Locator, 0);
             Thread.Sleep(10000);
-            actionButton.GetElement().Click();
+            Button actionWithIdButton = new(optionalTemplateForActionButton, id);
+            actionWithIdButton.GetElement().Click();
             deleteButton.GetElement().Click();
             confirmDeleteButton.GetElement().Click();
             return this;
         }
 
-        /// <summary>
-        /// Init firest account with property value change
-        /// </summary>
-        /// <param name="propertyValueForSearch">Property value for search</param>
-        /// <returns>AccountModal</returns>
-        public AccountModal InitAccountChange(string propertyValueForSearch)
-        {
-            WaitHelper.WaitPageLoaded(driver);
-            searchFieldInput.EnterText(propertyValueForSearch);
-            WaitHelper.WaitPageLoaded(driver);
-            WaitHelper.WaitElementsCountMoreThen(driver, tableRow.Locator, 0);
-            Thread.Sleep(10000);
-            actionButton.GetElement().Click();
-            editButton.GetElement().Click();
-            return new AccountModal();
-        }
 
         /// <summary>
         /// Init account change
@@ -140,7 +128,8 @@ namespace BusinessObject.SalesForce.UI.Pages
         {
             Log.Instance.Logger.Info($"Search contact by attribute: {propertyValueForSearch}");
             searchFieldInput.EnterText(propertyValueForSearch);
-            driver.FindElements(By.XPath($"//*[text()='{propertyValueForSearch}']")).Count().Should().BeGreaterThan(0);
+            BaseElement elementWithText = new(String.Format(optionalTemplateForElementWithText, propertyValueForSearch));
+            driver.FindElements(elementWithText.Locator).Count().Should().BeGreaterThan(0);
             Log.Instance.Logger.Info("Account exist");
             return this;
         }
